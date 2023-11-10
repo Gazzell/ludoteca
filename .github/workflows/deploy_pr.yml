@@ -21,6 +21,9 @@ jobs:
 
       - name: Install and Build
         run: flutter build web --release --base-href /ludoteca/
+      
+      - name: Tests...
+        run: flutter test
 
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
