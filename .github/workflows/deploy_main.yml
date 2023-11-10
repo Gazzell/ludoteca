@@ -1,4 +1,4 @@
-name: Flutter Web Deploy
+name: Deploy
 on:
   push:
     branches:
@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
       - run: flutter build web --release --base-href /ludoteca/
       - run: git config user.name github-actions
