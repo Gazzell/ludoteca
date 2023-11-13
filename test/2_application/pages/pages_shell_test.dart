@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ludoteca/2_application/pages/home/home_page.dart';
+import 'package:ludoteca/2_application/pages/pages_shell.dart';
 
 void main() {
   Widget widgetUnderTest() {
     return const MaterialApp(
       home: Material(
-        child: HomePage(),
+        child: PagesShell(currentPageIndex: 0),
       ),
     );
   }
 
-  group('HomePage', () {
+  group('PagesShell', () {
     testWidgets('should render a BottonNavigationBar',
         (WidgetTester tester) async {
       await tester.pumpWidget(widgetUnderTest());
 
-      expect(find.text('Home'), findsOneWidget);
+      expect(find.byType(BottomNavigationBar), findsOneWidget);
     });
   });
 }
