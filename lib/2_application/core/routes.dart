@@ -9,15 +9,20 @@ final GlobalKey<NavigatorState> _shellNavigatorKey =
 
 final routes = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/routes',
+  initialLocation: '/routes/home',
   routes: [
     ShellRoute(
         navigatorKey: _shellNavigatorKey,
         routes: [
           GoRoute(
-            path: '/routes',
             name: 'shell',
-            builder: (context, state) => const PagesShell(currentPageIndex: 0),
+            path: '/routes/:tab',
+            builder: (context, state) {
+              return PagesShell(
+                key: state.pageKey,
+                tab: state.pathParameters['tab'] ?? 'home',
+              );
+            },
           ),
         ],
         builder: (context, state, child) => child),
