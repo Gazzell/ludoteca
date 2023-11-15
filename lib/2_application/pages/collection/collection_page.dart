@@ -14,7 +14,12 @@ class CollectionPage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       color: colorScheme.secondaryContainer,
-      child: const Center(child: Expanded(child: Text('Collection'))),
+      child: const Center(
+          child: Column(
+        children: [
+          Expanded(child: Text('Collection')),
+        ],
+      )),
     );
   }
 }
