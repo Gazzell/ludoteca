@@ -15,7 +15,12 @@ class HomePage extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       color: colorScheme.primaryContainer,
-      child: const Center(child: Expanded(child: Text('Home'))),
+      child: const Center(
+          child: Column(
+        children: [
+          Expanded(child: Text('Home')),
+        ],
+      )),
     );
   }
 }
