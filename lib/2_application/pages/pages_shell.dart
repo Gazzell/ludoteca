@@ -53,6 +53,7 @@ class _PagesShellState extends State<PagesShell> {
                   onDestinationSelected: (index) =>
                       _onTapNavigationDestination(context, index),
                   selectedIndex: widget.currentPageIndex,
+                  padding: const EdgeInsets.all(0),
                 ),
               ),
             },
