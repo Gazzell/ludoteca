@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ludoteca/2_application/core/page_config.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_page.dart';
@@ -19,6 +20,13 @@ class PagesShell extends StatefulWidget {
 }
 
 class _PagesShellState extends State<PagesShell> {
+  final destinations = PagesShell.tabs.map(
+    (page) => NavigationDestination(
+      icon: Icon(page.icon, key: Key('icon-${page.name}')),
+      label: page.name,
+    ),
+  );
+
   void _onTapNavigationDestination(BuildContext context, int index) {
     context.goNamed(
       'shell',
@@ -30,20 +38,49 @@ class _PagesShellState extends State<PagesShell> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: PagesShell.tabs[widget.currentPageIndex].child,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        currentIndex: widget.currentPageIndex,
-        items: PagesShell.tabs
-            .map(
-              (tab) => BottomNavigationBarItem(
-                icon: Icon(tab.icon),
-                label: tab.name,
+        child: AdaptiveLayout(
+          primaryNavigation: SlotLayout(
+            config: <Breakpoint, SlotLayoutConfig>{
+              Breakpoints.mediumAndUp: SlotLayout.from(
+                key: const Key('primary-navigation-medium-and-up'),
+                builder: (context) => AdaptiveScaffold.standardNavigationRail(
+                  destinations: destinations
+                      .map(
+                        (destination) =>
+                            AdaptiveScaffold.toRailDestination(destination),
+                      )
+                      .toList(),
+                  onDestinationSelected: (index) =>
+                      _onTapNavigationDestination(context, index),
+                  selectedIndex: widget.currentPageIndex,
+                ),
               ),
-            )
-            .toList(),
-        onTap: (value) => _onTapNavigationDestination(context, value),
+            },
+          ),
+          bottomNavigation: SlotLayout(
+            config: <Breakpoint, SlotLayoutConfig>{
+              Breakpoints.small: SlotLayout.from(
+                key: const Key('bottom-navigation-small'),
+                builder: (context) =>
+                    AdaptiveScaffold.standardBottomNavigationBar(
+                  destinations: destinations.toList(),
+                  onDestinationSelected: (index) =>
+                      _onTapNavigationDestination(context, index),
+                  currentIndex: widget.currentPageIndex,
+                ),
+              ),
+            },
+          ),
+          body: SlotLayout(
+            config: <Breakpoint, SlotLayoutConfig>{
+              Breakpoints.smallAndUp: SlotLayout.from(
+                key: const Key('body-small-and-up'),
+                builder: (context) =>
+                    PagesShell.tabs[widget.currentPageIndex].child,
+              )
+            },
+          ),
+        ),
       ),
     );
   }
