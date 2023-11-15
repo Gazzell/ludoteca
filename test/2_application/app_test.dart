@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/2_application/app.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_page.dart';
@@ -22,14 +23,15 @@ void main() {
     testWidgets('on collection click goes to collection page',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
+      await tester.pumpAndSettle();
 
       expect(find.byType(CollectionPage), findsNothing);
 
-      final collectionNavigationText = find.text('collection');
+      final collectionNavigationIcon = find.byIcon(Icons.menu_book_outlined);
 
-      expect(collectionNavigationText, findsOneWidget);
+      expect(collectionNavigationIcon, findsOneWidget);
 
-      await tester.tap(collectionNavigationText);
+      await tester.tap(collectionNavigationIcon);
 
       await tester.pumpAndSettle();
 
@@ -38,18 +40,19 @@ void main() {
 
     testWidgets('can return to home page', (WidgetTester tester) async {
       await tester.pumpWidget(const App());
+      await tester.pumpAndSettle();
 
-      final collectionNavigationText = find.text('collection');
+      final collectionNavigationIcon = find.byIcon(Icons.menu_book_outlined);
 
-      await tester.tap(collectionNavigationText);
+      await tester.tap(collectionNavigationIcon);
 
       await tester.pumpAndSettle();
 
       expect(find.byType(CollectionPage), findsOneWidget);
 
-      final homeNavigationText = find.text('home');
+      final homeNavigationIcon = find.byIcon(Icons.home_outlined);
 
-      await tester.tap(homeNavigationText);
+      await tester.tap(homeNavigationIcon);
 
       await tester.pumpAndSettle();
 

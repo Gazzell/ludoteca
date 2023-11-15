@@ -12,11 +12,15 @@ void main() {
   }
 
   group('PagesShell', () {
-    testWidgets('should render a BottonNavigationBar',
+    testWidgets('should render navigation bar icons',
         (WidgetTester tester) async {
       await tester.pumpWidget(widgetUnderTest());
 
-      expect(find.byType(BottomNavigationBar), findsOneWidget);
+      final collectionNavigationIcon = find.byIcon(Icons.menu_book_outlined);
+      expect(collectionNavigationIcon, findsOneWidget);
+
+      final homeNavigationIcon = find.byIcon(Icons.home_outlined);
+      expect(homeNavigationIcon, findsOneWidget);
     });
   });
 }
