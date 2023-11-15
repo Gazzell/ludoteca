@@ -12,6 +12,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text('Home');
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      color: colorScheme.primaryContainer,
+      child: const Center(child: Expanded(child: Text('Home'))),
+    );
   }
 }

@@ -33,6 +33,7 @@ class _PagesShellState extends State<PagesShell> {
         child: PagesShell.tabs[widget.currentPageIndex].child,
       ),
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
         currentIndex: widget.currentPageIndex,
         items: PagesShell.tabs
             .map(

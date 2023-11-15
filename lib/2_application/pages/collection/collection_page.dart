@@ -11,6 +11,10 @@ class CollectionPage extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    return const Text('Collection');
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      color: colorScheme.secondaryContainer,
+      child: const Center(child: Expanded(child: Text('Collection'))),
+    );
   }
 }

@@ -9,6 +9,20 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       title: 'Ludoteca app',
       routerConfig: routes,
+      themeMode: ThemeMode.system,
+      theme: ThemeData.from(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 239, 43, 187),
+          brightness: Brightness.light,
+        ),
+      ),
+      darkTheme: ThemeData.from(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 239, 43, 187),
+        ),
+      ),
     );
   }
 }
