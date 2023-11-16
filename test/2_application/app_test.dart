@@ -23,7 +23,7 @@ void main() {
     testWidgets('on collection click goes to collection page',
         (WidgetTester tester) async {
       await tester.pumpWidget(const App());
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 10));
 
       expect(find.byType(CollectionPage), findsNothing);
 
