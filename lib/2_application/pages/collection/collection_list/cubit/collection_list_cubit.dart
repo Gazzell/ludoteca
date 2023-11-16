@@ -4,25 +4,23 @@ import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/use_cases/get_collection_item_ids.dart';
 import 'package:ludoteca/1_domain/use_cases/use_case.dart';
 
-part 'collection_cubit_state.dart';
+part 'collection_list_cubit_state.dart';
 
-class CollectionCubit extends Cubit<CollectionCubitState> {
+class CollectionListCubit extends Cubit<CollectionListCubitState> {
   final GetCollectionItemIds getCollectionItemIds;
 
-  CollectionCubit({
+  CollectionListCubit({
     required this.getCollectionItemIds,
-    CollectionCubitState? initialState,
-  }) : super(initialState ?? const CollectionInitialState());
+    CollectionListCubitState? initialState,
+  }) : super(initialState ?? const CollectionListLoadingState());
 
   Future<void> readItemIds() async {
-    emit(const CollectionLoadingState());
-    
     final itemIds = await getCollectionItemIds(NoParams());
 
     if (itemIds.isLeft) {
-      emit(const CollectionErrorState());
+      emit(const CollectionListErrorState());
     } else {
-      emit(CollectionItemIdsLoadedState(itemIds: itemIds.right));
+      emit(CollectionListItemIdsLoadedState(itemIds: itemIds.right));
     }
   }
 }

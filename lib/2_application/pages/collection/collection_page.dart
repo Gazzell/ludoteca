@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ludoteca/2_application/core/page_config.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_list/collection_list_page.dart';
 
 class CollectionPage extends StatelessWidget {
   const CollectionPage({super.key});
@@ -9,17 +10,9 @@ class CollectionPage extends StatelessWidget {
     name: 'collection',
     child: CollectionPage(),
   );
+  
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      color: colorScheme.secondaryContainer,
-      child: const Center(
-          child: Column(
-        children: [
-          Expanded(child: Text('Collection')),
-        ],
-      )),
-    );
+    return const CollectionListPage();
   }
 }

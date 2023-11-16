@@ -5,7 +5,7 @@ import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/failures/failures.dart';
 import 'package:ludoteca/1_domain/use_cases/get_collection_item_ids.dart';
 import 'package:ludoteca/1_domain/use_cases/use_case.dart';
-import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_list/cubit/collection_list_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockGetCollectionItemIdsUseCase extends Mock
@@ -14,18 +14,18 @@ class MockGetCollectionItemIdsUseCase extends Mock
 void main() {
   final mockGetCollectionItemIdsUseCase = MockGetCollectionItemIdsUseCase();
 
-  group('CollectionCubit', () {
+  group('CollectionListCubit', () {
     group('should emit', () {
       blocTest(
         'nothing when no method is called',
-        build: () => CollectionCubit(
+        build: () => CollectionListCubit(
           getCollectionItemIds: mockGetCollectionItemIdsUseCase,
         ),
-        expect: () => const <CollectionCubitState>[],
+        expect: () => const <CollectionListCubitState>[],
       );
 
       blocTest(
-        '[CollectionLoadingState, CollectionErrorState] when readItemIds fails',
+        'CollectionListErrorState when readItemIds fails',
         setUp: () =>
             when(() => mockGetCollectionItemIdsUseCase.call(NoParams()))
                 .thenAnswer(
@@ -33,18 +33,17 @@ void main() {
             Left(ServerFailure()),
           ),
         ),
-        build: () => CollectionCubit(
+        build: () => CollectionListCubit(
           getCollectionItemIds: mockGetCollectionItemIdsUseCase,
         ),
         act: (cubit) => cubit.readItemIds(),
-        expect: () => const <CollectionCubitState>[
-          CollectionLoadingState(),
-          CollectionErrorState(),
+        expect: () => const <CollectionListCubitState>[
+          CollectionListErrorState(),
         ],
       );
 
       blocTest(
-        '[CollectionLoadingState, CollectionLoadedState] when readItemIds succeeds',
+        'CollectionListLoadedState when readItemIds succeeds',
         setUp: () =>
             when(() => mockGetCollectionItemIdsUseCase.call(NoParams()))
                 .thenAnswer(
@@ -52,13 +51,12 @@ void main() {
             Right([ItemId.fromUniqueString('item-0')]),
           ),
         ),
-        build: () => CollectionCubit(
+        build: () => CollectionListCubit(
           getCollectionItemIds: mockGetCollectionItemIdsUseCase,
         ),
         act: (cubit) => cubit.readItemIds(),
-        expect: () => <CollectionCubitState>[
-          const CollectionLoadingState(),
-          CollectionItemIdsLoadedState(
+        expect: () => <CollectionListCubitState>[
+          CollectionListItemIdsLoadedState(
             itemIds: [ItemId.fromUniqueString('item-0')],
           ),
         ],
