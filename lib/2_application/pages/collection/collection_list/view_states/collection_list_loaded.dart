@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ludoteca/1_domain/entities/unique_id.dart';
+import 'package:ludoteca/1_domain/entities/item.dart';
 
 class CollectionListLoaded extends StatelessWidget {
-  final List<ItemId> items;
+  final List<Item> items;
   const CollectionListLoaded({super.key, required this.items});
 
   @override
@@ -14,7 +14,7 @@ class CollectionListLoaded extends StatelessWidget {
           return Card(
               child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Text(items[index].value),
+            child: Text(items[index].title),
           ));
         },
       ),

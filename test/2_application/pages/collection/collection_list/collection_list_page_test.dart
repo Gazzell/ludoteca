@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ludoteca/1_domain/entities/unique_id.dart';
+import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/collection_list_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/cubit/collection_list_cubit.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/view_states/collection_list_error.dart';
@@ -75,9 +75,7 @@ void main() {
         Stream.fromIterable(
           [
             const CollectionListLoadingState(),
-            CollectionListItemIdsLoadedState(itemIds: [
-              ItemId.fromUniqueString('an item'),
-            ]),
+            CollectionListItemsLoadedState(items: [Item.empty()]),
           ],
         ),
         initialState: const CollectionListLoadingState(),

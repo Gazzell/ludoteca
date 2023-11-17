@@ -15,10 +15,10 @@ final class CollectionListErrorState extends CollectionListCubitState {
   const CollectionListErrorState();
 }
 
-final class CollectionListItemIdsLoadedState extends CollectionListCubitState {
-  final List<ItemId> itemIds;
-  const CollectionListItemIdsLoadedState({required this.itemIds});
+final class CollectionListItemsLoadedState extends CollectionListCubitState {
+  final List<Item> items;
+  const CollectionListItemsLoadedState({required this.items});
 
   @override
-  List<Object> get props => [itemIds];
+  List<Object> get props => [items];
 }

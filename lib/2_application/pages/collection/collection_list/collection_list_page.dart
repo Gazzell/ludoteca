@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
-import 'package:ludoteca/1_domain/use_cases/get_collection_item_ids.dart';
+import 'package:ludoteca/1_domain/use_cases/get_collection_items.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/cubit/collection_list_cubit.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/view_states/collection_list_error.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/view_states/collection_list_loaded.dart';
@@ -14,11 +14,11 @@ class CollectionListPageProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CollectionListCubit(
-        getCollectionItemIds: GetCollectionItemIds(
+        getCollectionItems: GetCollectionItems(
           collectionRepository:
               RepositoryProvider.of<CollectionRepository>(context),
         ),
-      )..readItemIds(),
+      )..readItems(),
       child: const CollectionListPage(),
     );
   }
@@ -36,8 +36,8 @@ class CollectionListPage extends StatelessWidget {
           if (state is CollectionListLoadingState) {
             return const CollectionListLoading();
           }
-          if (state is CollectionListItemIdsLoadedState) {
-            return CollectionListLoaded(items: state.itemIds);
+          if (state is CollectionListItemsLoadedState) {
+            return CollectionListLoaded(items: state.items);
           }
           return const CollectionListError();
         },
