@@ -28,7 +28,7 @@ jobs:
         run: flutter test
       
       - name: Install and Build
-        run: flutter build web --release --base-href /ludoteca/pr-preview/pr-${{ github.event.pull_request.number }}/
+        run: flutter build web --release --base-href /ludoteca/pr-preview/pr-${{ github.event.pull_request.number }}/ --web-renderer html
 
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
