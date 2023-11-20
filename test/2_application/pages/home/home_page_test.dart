@@ -12,7 +12,7 @@ void main() {
   }
 
   group('HomePage', () {
-    testWidgets('should render a BottonNavigationBar',
+    testWidgets('should render a Home widget',
         (WidgetTester tester) async {
       await tester.pumpWidget(widgetUnderTest());
 
