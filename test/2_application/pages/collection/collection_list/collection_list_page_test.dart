@@ -8,6 +8,7 @@ import 'package:ludoteca/2_application/pages/collection/collection_list/cubit/co
 import 'package:ludoteca/2_application/pages/collection/collection_list/view_states/collection_list_error.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/view_states/collection_list_loaded.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/view_states/collection_list_loading.dart';
+import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 class MockCollectionListCubit extends MockCubit<CollectionListCubitState>
@@ -17,8 +18,15 @@ void main() {
   Widget widgetUnderTest({required CollectionListCubit cubit}) {
     return MaterialApp(
       home: Material(
-        child: BlocProvider<CollectionListCubit>(
-          create: (context) => cubit,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<CollectionListCubit>(
+              create: (context) => cubit,
+            ),
+            BlocProvider(
+              create: (context) => CollectionCubit(),
+            ),
+          ],
           child: const CollectionListPage(),
         ),
       ),
@@ -87,7 +95,7 @@ void main() {
       ));
 
       await mockNetworkImages(() async => tester.pumpAndSettle());
-      
+
       expect(find.byType(CollectionListLoaded), findsOneWidget);
     });
   });
