@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/collection_item_detail_page.dart';
@@ -31,22 +30,14 @@ final routes = GoRouter(
       builder: (context, state, child) => child,
     ),
     GoRoute(
-        name: 'itemDetail',
-        path: '/routes/collection/:itemId',
-        builder: (context, state) {
-          final itemIdValue = state.pathParameters['itemId'];
-          final itemId =
-              itemIdValue != null ? ItemId.fromUniqueString(itemIdValue) : null;
-          return NotificationListener(
-              onNotification: (notification) {
-                if (Breakpoints.small.isActive(context) && context.canPop()) {
-                  context.pop(true);
-                }
-                return true;
-              },
-              child: SizeChangedLayoutNotifier(
-                child: CollectionItemDetailPage(selectedItem: itemId),
-              ));
-        },),
+      name: 'itemDetail',
+      path: '/routes/collection/:itemId',
+      builder: (context, state) {
+        final itemIdValue = state.pathParameters['itemId'];
+        final itemId =
+            itemIdValue != null ? ItemId.fromUniqueString(itemIdValue) : null;
+        return CollectionItemDetailSmallPage(selectedItem: itemId);
+      },
+    ),
   ],
 );
