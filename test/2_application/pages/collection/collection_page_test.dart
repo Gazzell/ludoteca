@@ -8,7 +8,7 @@ void main() {
   Widget widgetUnderTest() {
     return const MaterialApp(
       home: Material(
-        child: CollectionPage(),
+        child: CollectionPageProvider(),
       ),
     );
   }
