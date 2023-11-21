@@ -26,7 +26,7 @@ void main() {
       await tester.pumpWidget(
         widgetUnderTest(),
       );
-      expect(find.byType(CollectionItemDetail), findsOneWidget);
+      expect(find.byType(CollectionItemDetailPage), findsOneWidget);
     });
   });
 }
