@@ -24,13 +24,10 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
     collectionCubit.selectItem(widget.items[index].id);
 
     if (Breakpoints.small.isActive(context)) {
-      final popBecauseBigWindow =
-          await context.pushNamed('itemDetail', pathParameters: {
+      await context.pushNamed('itemDetail', pathParameters: {
         'itemId': widget.items[index].id.value,
-      }) as bool;
-      if (!popBecauseBigWindow) {
-        collectionCubit.selectItem(null);
-      }
+      });
+      collectionCubit.selectItem(null);
     }
   }
 
@@ -46,23 +43,39 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
           });
         }
       },
-      child: Center(
-        child: ListView.builder(
-          itemCount: widget.items.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () => _onItemTap(context, index),
-              child: Card(
-                  color: selectedItemId == widget.items[index].id
+      child: NotificationListener(
+        onNotification: (notification) {
+          if (Breakpoints.small.isActive(context) && selectedItemId != null) {
+            final collectionCubit = context.read<CollectionCubit>();
+            collectionCubit.selectItem(null);
+          }
+          return true;
+        },
+        child: Center(
+          child: ListView.builder(
+            itemCount: widget.items.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () => _onItemTap(context, index),
+                child: Card(
+                  color: selectedItemId == widget.items[index].id &&
+                          !Breakpoints.small.isActive(context)
                       ? colorScheme.inverseSurface
                       : colorScheme.surface,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Row(
                       children: [
-                        Image.network(widget.items[index].imageUrl,
-                            height: 200, width: 200),
                         Expanded(
+                          flex: 1,
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Image.network(widget.items[index].imageUrl,
+                                height: 200, width: 200),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
                           child: Column(
                             children: [
                               Text(
@@ -78,9 +91,11 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
                         ),
                       ],
                     ),
-                  )),
-            );
-          },
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

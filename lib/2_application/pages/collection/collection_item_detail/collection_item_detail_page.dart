@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 
@@ -9,16 +8,17 @@ class CollectionItemDetailSmallPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener(
-      onNotification: (notification) {
-        if (Breakpoints.small.isActive(context) && context.canPop()) {
-          context.pop(true);
-        }
-        return true;
-      },
-      child: SizeChangedLayoutNotifier(
-        child: CollectionItemDetailPage(selectedItem: selectedItem),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+        title: Text(selectedItem?.value ?? ''),
       ),
+      body: CollectionItemDetailPage(selectedItem: selectedItem),
     );
   }
 }
