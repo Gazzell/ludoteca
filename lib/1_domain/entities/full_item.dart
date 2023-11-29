@@ -1,12 +1,12 @@
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 
-class ItemDetail extends Item {
+class FullItem extends Item {
   final String? publisher;
   final String? author;
   final String? longDescription;
   final DateTime? adquisitionDate;
-  const ItemDetail({
+  const FullItem({
     required ItemId id,
     required String title,
     required String description,
