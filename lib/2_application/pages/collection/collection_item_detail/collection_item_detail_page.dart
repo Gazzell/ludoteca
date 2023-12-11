@@ -5,6 +5,10 @@ import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
 import 'package:ludoteca/1_domain/use_cases/get_full_item.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/cubit/collection_item_detail_cubit.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_empty.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_error.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_loaded.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_loading.dart';
 
 class CollectionItemDetailSmallPage extends StatelessWidget {
   final ItemId? selectedItem;
@@ -22,42 +26,53 @@ class CollectionItemDetailSmallPage extends StatelessWidget {
         ),
         title: Text(selectedItem?.value ?? ''),
       ),
-      body: CollectionItemDetailPage(selectedItem: selectedItem),
+      body: CollectionItemDetailPageProvider(selectedItem: selectedItem),
     );
   }
 }
 
 class CollectionItemDetailPageProvider extends StatelessWidget {
-  final ItemId? itemId;
+  final ItemId? selectedItem;
   const CollectionItemDetailPageProvider(
-      {super.key, required this.itemId, req});
+      {super.key, required this.selectedItem, req});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final cubit = CollectionItemDetailCubit(
+        return CollectionItemDetailCubit(
           getItemDetail: GetFullItem(
             collectionRepository:
                 RepositoryProvider.of<CollectionRepository>(context),
           ),
-        );
-        if (itemId != null) {
-          cubit.readItemDetail(itemId!);
-        }
-        return cubit;
+        )..readItemDetail(selectedItem);
       },
-      child: CollectionItemDetailPage(selectedItem: itemId),
+      child: const CollectionItemDetailPage(),
     );
   }
 }
 
 class CollectionItemDetailPage extends StatelessWidget {
-  final ItemId? selectedItem;
-  const CollectionItemDetailPage({super.key, required this.selectedItem});
+  const CollectionItemDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Text(selectedItem?.value ?? '');
+    return BlocBuilder<CollectionItemDetailCubit,
+        CollectionItemDetailCubitState>(
+      builder: (context, state) {
+        if (state is CollectionItemDetailLoadingState) {
+          return const CollectionItemDetailLoading();
+        }
+        if (state is CollectionItemDetailLoadedState) {
+          return CollectionItemDetailLoaded(
+            itemDetail: state.itemDetail,
+          );
+        }
+        if (state is CollectionItemDetailEmptyState) {
+          return const CollectionItemDetailEmpty();
+        }
+        return const CollectionItemDetailError();
+      },
+    );
   }
 }

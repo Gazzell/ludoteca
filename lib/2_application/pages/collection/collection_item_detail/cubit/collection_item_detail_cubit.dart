@@ -10,10 +10,18 @@ part 'collection_item_detail_cubit_state.dart';
 class CollectionItemDetailCubit extends Cubit<CollectionItemDetailCubitState> {
   final GetFullItem getItemDetail;
   CollectionItemDetailCubit({required this.getItemDetail})
-      : super(const CollectionItemDetailLoadingState());
+      : super(const CollectionItemDetailEmptyState());
 
-  Future<void> readItemDetail(ItemId itemId) async {
+  Future<void> readItemDetail(ItemId? itemId) async {
+    if (itemId == null) {
+      emit(const CollectionItemDetailEmptyState());
+      return;
+    }
+
+    emit(const CollectionItemDetailLoadingState());
+    
     final itemDetail = await getItemDetail(ItemParams(itemId: itemId));
+    
     if (itemDetail.isLeft) {
       emit(const CollectionItemDetailErrorState());
     } else {

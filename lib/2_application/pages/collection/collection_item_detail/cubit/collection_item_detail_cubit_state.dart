@@ -25,3 +25,8 @@ final class CollectionItemDetailLoadedState
   @override
   List<Object> get props => [itemDetail];
 }
+
+final class CollectionItemDetailEmptyState
+    extends CollectionItemDetailCubitState {
+  const CollectionItemDetailEmptyState();
+}

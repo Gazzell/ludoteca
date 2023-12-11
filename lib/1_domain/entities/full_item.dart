@@ -6,6 +6,7 @@ class FullItem extends Item {
   final String? author;
   final String? longDescription;
   final DateTime? adquisitionDate;
+  
   const FullItem({
     required ItemId id,
     required String title,
@@ -21,4 +22,25 @@ class FullItem extends Item {
           description: description,
           imageUrl: imageUrl,
         );
+
+  factory FullItem.empty() {
+    return FullItem(
+      id: ItemId(),
+      title: '',
+      description: '',
+      imageUrl: '',
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        id,
+        title,
+        description,
+        imageUrl,
+        publisher,
+        author,
+        longDescription,
+        adquisitionDate,
+      ];
 }
