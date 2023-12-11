@@ -24,6 +24,17 @@ void main() {
       );
 
       blocTest(
+        'CollectionItemDetailEmptyState when no itemId is provided',
+        build: () => CollectionItemDetailCubit(
+          getItemDetail: mockGetItemDetailUseCase,
+        ),
+        act: (cubit) => cubit.readItemDetail(null),
+        expect: () => const <CollectionItemDetailCubitState>[
+          CollectionItemDetailEmptyState(),
+        ],
+      );
+
+      blocTest(
         'CollectionItemDetailErrorState when readItemIds fails',
         setUp: () => when(
           () => mockGetItemDetailUseCase.call(
@@ -37,6 +48,7 @@ void main() {
         ),
         act: (cubit) => cubit.readItemDetail(ItemId.fromUniqueString('itemId')),
         expect: () => const <CollectionItemDetailCubitState>[
+          CollectionItemDetailLoadingState(),
           CollectionItemDetailErrorState(),
         ],
       );
@@ -69,6 +81,7 @@ void main() {
         ),
         act: (cubit) => cubit.readItemDetail(ItemId.fromUniqueString('itemId')),
         expect: () => <CollectionItemDetailCubitState>[
+          const CollectionItemDetailLoadingState(),
           CollectionItemDetailLoadedState(
             itemDetail: FullItem(
               id: ItemId.fromUniqueString('itemId'),

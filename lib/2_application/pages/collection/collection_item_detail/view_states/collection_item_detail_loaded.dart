@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:ludoteca/1_domain/entities/full_item.dart';
 
 class CollectionItemDetailLoaded extends StatelessWidget {
-  const CollectionItemDetailLoaded({super.key});
+  final FullItem itemDetail;
+  const CollectionItemDetailLoaded({super.key, required this.itemDetail});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Text(itemDetail.title);
   }
 }

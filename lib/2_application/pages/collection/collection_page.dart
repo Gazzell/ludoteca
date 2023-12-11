@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ludoteca/0_data/repositories/collection_repository_mock.dart';
-import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
 import 'package:ludoteca/2_application/core/page_config.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/collection_item_detail_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/collection_list_page.dart';
@@ -15,10 +13,7 @@ class CollectionPageProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CollectionCubit(),
-      child: RepositoryProvider<CollectionRepository>(
-        create: (context) => CollectionRepositoryMock(),
-        child: const CollectionPage(),
-      ),
+      child: const CollectionPage(),
     );
   }
 }
@@ -58,7 +53,8 @@ class _CollectionPageState extends State<CollectionPage> {
                     final selectedItem = (state is CollectionItemSelectedState)
                         ? state.selectedItem
                         : null;
-                    return CollectionItemDetailPage(
+                    return CollectionItemDetailPageProvider(
+                      key: Key('detail-${selectedItem?.value}'),
                       selectedItem: selectedItem,
                     );
                   },
