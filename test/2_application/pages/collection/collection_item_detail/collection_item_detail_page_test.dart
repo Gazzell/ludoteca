@@ -9,6 +9,7 @@ import 'package:ludoteca/2_application/pages/collection/collection_item_detail/v
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_error.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_loaded.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_loading.dart';
+import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 class MockCollectionItemDetailCubit
     extends MockCubit<CollectionItemDetailCubitState>
@@ -113,11 +114,12 @@ void main() {
             initialState: const CollectionItemDetailEmptyState(),
           );
 
-          await tester.pumpWidget(
-            widgetUnderTest(cubit: mockCollectionItemDetailCubit),
-          );
-
-          await tester.pumpAndSettle();
+          await mockNetworkImages(() async {
+            await tester.pumpWidget(
+              widgetUnderTest(cubit: mockCollectionItemDetailCubit),
+            );
+            await tester.pumpAndSettle();
+          });
 
           expect(find.byType(CollectionItemDetailLoaded), findsOneWidget);
         });
