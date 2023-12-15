@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/view_states/collection_list_loaded.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_list/widgets/collection_list_item.dart';
 import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
@@ -60,7 +61,7 @@ void main() {
 
           await widgetTester.pumpAndSettle();
 
-          expect(find.byType(Card), findsNWidgets(2));
+          expect(find.byType(CollectionListItem), findsNWidgets(2));
         },
       );
 
@@ -94,7 +95,7 @@ void main() {
 
           await widgetTester.pumpAndSettle();
 
-          final cards = find.byType(Card);
+          final cards = find.byType(CollectionListItem);
 
           await widgetTester.tap(cards.at(1));
           await widgetTester.pumpAndSettle();
