@@ -31,7 +31,7 @@ void main() {
       final item = Item(
         id: ItemId.fromUniqueString('0'),
         title: 'a title',
-        description: 'a description',
+        status: ItemStatus.available,
         imageUrl:
             'https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__imagepagezoom/img/7a0LOL48K-7JNIOSGtcsNsIxkN0=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic3490053.jpg',
       );
@@ -42,14 +42,13 @@ void main() {
 
       expect(find.byType(Image), findsOneWidget);
       expect(find.text('a title'), findsOneWidget);
-      expect(find.text('a description'), findsOneWidget);
     });
 
     testWidgets('should emit onTap', (WidgetTester tester) async {
       final item = Item(
         id: ItemId.fromUniqueString('0'),
         title: 'a title',
-        description: 'a description',
+        status: ItemStatus.available,
         imageUrl: '',
       );
 

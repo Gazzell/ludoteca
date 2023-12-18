@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:either_dart/either.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/full_item.dart';
@@ -19,7 +21,9 @@ class CollectionRepositoryMock implements CollectionRepository {
         element.value: Item(
           id: element,
           title: 'Title of ${element.value}',
-          description: 'A super fancy description of ${element.value}',
+          status: Random().nextInt(2) % 1 == 0
+              ? ItemStatus.unavailable
+              : ItemStatus.available,
           imageUrl:
               'https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__imagepagezoom/img/7a0LOL48K-7JNIOSGtcsNsIxkN0=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic3490053.jpg',
         ),
@@ -50,7 +54,7 @@ class CollectionRepositoryMock implements CollectionRepository {
           id: ItemId.fromUniqueString(itemId.value),
           imageUrl: item.imageUrl,
           title: item.title,
-          description: item.description,
+          status: item.status,
           adquisitionDate: DateTime.now(),
           publisher: 'publisher',
           author: 'author',

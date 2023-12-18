@@ -69,7 +69,7 @@ class CollectionItemDetailLoaded extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                          itemDetail.longDescription ?? itemDetail.description),
+                          itemDetail.longDescription ?? 'itemDetail.description'),
                     )
                   ],
                 ),

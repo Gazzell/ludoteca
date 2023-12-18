@@ -10,7 +10,7 @@ class FullItem extends Item {
   const FullItem({
     required ItemId id,
     required String title,
-    required String description,
+    required ItemStatus status,
     required String imageUrl,
     this.publisher,
     this.author,
@@ -19,7 +19,7 @@ class FullItem extends Item {
   }) : super(
           id: id,
           title: title,
-          description: description,
+          status: status,
           imageUrl: imageUrl,
         );
 
@@ -27,7 +27,7 @@ class FullItem extends Item {
     return FullItem(
       id: ItemId(),
       title: '',
-      description: '',
+      status: ItemStatus.available,
       imageUrl: '',
     );
   }
@@ -36,7 +36,7 @@ class FullItem extends Item {
   List<Object?> get props => [
         id,
         title,
-        description,
+        status,
         imageUrl,
         publisher,
         author,

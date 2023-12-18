@@ -24,7 +24,9 @@ class CollectionListItem extends StatelessWidget {
       child: Card(
         color: selected && !Breakpoints.small.isActive(context)
             ? colorScheme.inverseSurface
-            : colorScheme.surface,
+            : item.status == ItemStatus.available
+                ? colorScheme.surface
+                : colorScheme.error,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(
@@ -43,10 +45,6 @@ class CollectionListItem extends StatelessWidget {
                     Text(
                       item.title,
                       style: textTheme.titleLarge,
-                    ),
-                    Text(
-                      item.description,
-                      style: textTheme.bodyMedium,
                     ),
                   ],
                 ),
