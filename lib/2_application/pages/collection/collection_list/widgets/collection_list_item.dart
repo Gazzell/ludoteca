@@ -26,27 +26,28 @@ class CollectionListItem extends StatelessWidget {
             ? colorScheme.inverseSurface
             : item.status == ItemStatus.available
                 ? colorScheme.surface
-                : colorScheme.error,
+                : colorScheme.inversePrimary,
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5.0),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                flex: 1,
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: Image.network(item.imageUrl, height: 200, width: 200),
+                flex: 2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(item.imageUrl),
                 ),
               ),
               Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    Text(
-                      item.title,
-                      style: textTheme.titleLarge,
-                    ),
-                  ],
+                flex: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    item.title,
+                    style: textTheme.headlineMedium,
+                    textAlign: TextAlign.start,
+                  ),
                 ),
               ),
             ],
