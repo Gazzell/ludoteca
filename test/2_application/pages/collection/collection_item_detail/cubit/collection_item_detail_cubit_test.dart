@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/1_domain/entities/full_item.dart';
+import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/failures/failures.dart';
 import 'package:ludoteca/1_domain/use_cases/get_full_item.dart';
@@ -67,7 +68,7 @@ void main() {
               FullItem(
                 id: ItemId.fromUniqueString('itemId'),
                 title: 'title',
-                description: 'description',
+                status: ItemStatus.available,
                 imageUrl: '',
                 publisher: 'publisher',
                 author: 'author',
@@ -86,7 +87,7 @@ void main() {
             itemDetail: FullItem(
               id: ItemId.fromUniqueString('itemId'),
               title: 'title',
-              description: 'description',
+              status: ItemStatus.available,
               imageUrl: '',
               publisher: 'publisher',
               author: 'author',

@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/1_domain/entities/full_item.dart';
+import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/failures/failures.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
@@ -14,7 +15,7 @@ void main() {
   final itemDetail = FullItem(
     id: ItemId.fromUniqueString('0'),
     title: 'title',
-    description: 'description',
+    status: ItemStatus.available,
     imageUrl: '',
     author: 'author',
     publisher: 'publisher',

@@ -84,7 +84,7 @@ void main() {
                   (index) => Item(
                     id: ItemId.fromUniqueString('$index'),
                     title: '',
-                    description: '',
+                    status: ItemStatus.available,
                   ),
                   growable: false,
                 ),

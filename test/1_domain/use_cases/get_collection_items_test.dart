@@ -15,7 +15,7 @@ final collectionItems = List<Item>.generate(
   (index) => Item(
     id: ItemId.fromUniqueString(index.toString()),
     title: 'title',
-    description: 'description',
+    status: ItemStatus.available,
   ),
 );
 
