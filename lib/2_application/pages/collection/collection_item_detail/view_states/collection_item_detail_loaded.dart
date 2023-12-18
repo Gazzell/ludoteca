@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ludoteca/1_domain/entities/full_item.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_item_detail/widgets/item_detail_data/item_detail_data.dart';
 
 class CollectionItemDetailLoaded extends StatelessWidget {
   final FullItem itemDetail;
@@ -23,59 +24,7 @@ class CollectionItemDetailLoaded extends StatelessWidget {
                   child: Image.network(itemDetail.imageUrl),
                 ),
               ),
-              Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Stack(children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                  size: 50,
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: Text('8'),
-                              ),
-                            ]),
-                          ),
-                          Flexible(
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                itemDetail.title,
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(itemDetail.longDescription ??
-                          'itemDetail.description'),
-                    )
-                  ],
-                ),
-              )
+              ItemDetailData(itemDetail: itemDetail)
             ],
           ),
         ),
