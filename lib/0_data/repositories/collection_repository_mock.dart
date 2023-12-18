@@ -20,8 +20,9 @@ class CollectionRepositoryMock implements CollectionRepository {
       for (var element in _itemIds)
         element.value: Item(
           id: element,
-          title: 'Title of ${element.value}',
-          status: Random().nextInt(2) % 1 == 0
+          title:
+              'Title of ${element.value} ${Random().nextInt(4) % 4 == 0 ? 'with a very long title and far more long, even too long' : ''}',
+          status: Random().nextInt(5) % 5 == 0
               ? ItemStatus.unavailable
               : ItemStatus.available,
           imageUrl:

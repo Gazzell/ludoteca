@@ -12,18 +12,18 @@ class CollectionItemDetailLoaded extends StatelessWidget {
     return Center(
       child: Container(
         color: Colors.black54,
-        child: Column(
-          children: [
-            SizedBox(
-              height: height / 3,
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Image.network(itemDetail.imageUrl),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: height / 3,
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Image.network(itemDetail.imageUrl),
+                ),
               ),
-            ),
-            Expanded(
-              child: Container(
+              Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -56,11 +56,13 @@ class CollectionItemDetailLoaded extends StatelessWidget {
                               ),
                             ]),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              itemDetail.title,
-                              style: Theme.of(context).textTheme.titleLarge,
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                itemDetail.title,
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
                             ),
                           ),
                         ],
@@ -68,14 +70,14 @@ class CollectionItemDetailLoaded extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: Text(
-                          itemDetail.longDescription ?? 'itemDetail.description'),
+                      child: Text(itemDetail.longDescription ??
+                          'itemDetail.description'),
                     )
                   ],
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
