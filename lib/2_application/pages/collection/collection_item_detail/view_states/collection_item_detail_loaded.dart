@@ -10,23 +10,21 @@ class CollectionItemDetailLoaded extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
 
-    return Center(
+    return SingleChildScrollView(
       child: Container(
         color: Colors.black54,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: height / 3,
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Image.network(itemDetail.imageUrl),
-                ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: height * 0.33,
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.network(itemDetail.imageUrl),
               ),
-              ItemDetailData(itemDetail: itemDetail)
-            ],
-          ),
+            ),
+            ItemDetailData(itemDetail: itemDetail)
+          ],
         ),
       ),
     );
