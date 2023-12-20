@@ -10,31 +10,14 @@ import 'package:ludoteca/2_application/pages/collection/collection_item_detail/v
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_loaded.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_loading.dart';
 
-class CollectionItemDetailSmallPage extends StatelessWidget {
-  final ItemId? selectedItem;
-  const CollectionItemDetailSmallPage({super.key, required this.selectedItem});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.pop();
-          },
-        ),
-        title: Text(selectedItem?.value ?? ''),
-      ),
-      body: CollectionItemDetailPageProvider(selectedItem: selectedItem),
-    );
-  }
-}
-
 class CollectionItemDetailPageProvider extends StatelessWidget {
   final ItemId? selectedItem;
-  const CollectionItemDetailPageProvider(
-      {super.key, required this.selectedItem, req});
+  final bool showAppBar;
+  const CollectionItemDetailPageProvider({
+    super.key,
+    required this.selectedItem,
+    this.showAppBar = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,32 +30,56 @@ class CollectionItemDetailPageProvider extends StatelessWidget {
           ),
         )..readItemDetail(selectedItem);
       },
-      child: const CollectionItemDetailPage(),
+      child: CollectionItemDetailPage(
+        showAppBar: showAppBar,
+        title: selectedItem?.value,
+      ),
     );
   }
 }
 
 class CollectionItemDetailPage extends StatelessWidget {
-  const CollectionItemDetailPage({super.key});
+  final bool showAppBar;
+  final String? title;
+  const CollectionItemDetailPage({
+    super.key,
+    this.showAppBar = false,
+    this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionItemDetailCubit,
-        CollectionItemDetailCubitState>(
-      builder: (context, state) {
-        if (state is CollectionItemDetailLoadingState) {
-          return const CollectionItemDetailLoading();
-        }
-        if (state is CollectionItemDetailLoadedState) {
-          return CollectionItemDetailLoaded(
-            itemDetail: state.itemDetail,
-          );
-        }
-        if (state is CollectionItemDetailEmptyState) {
-          return const CollectionItemDetailEmpty();
-        }
-        return const CollectionItemDetailError();
-      },
-    );
+        CollectionItemDetailCubitState>(builder: (context, state) {
+      return Scaffold(
+        appBar: showAppBar
+            ? AppBar(
+                title: Text(title ?? ''),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    context.pop();
+                  },
+                ),
+              )
+            : null,
+        body: Builder(
+          builder: (context) {
+            if (state is CollectionItemDetailLoadingState) {
+              return const CollectionItemDetailLoading();
+            }
+            if (state is CollectionItemDetailLoadedState) {
+              return CollectionItemDetailLoaded(
+                itemDetail: state.itemDetail,
+              );
+            }
+            if (state is CollectionItemDetailEmptyState) {
+              return const CollectionItemDetailEmpty();
+            }
+            return const CollectionItemDetailError();
+          },
+        ),
+      );
+    });
   }
 }

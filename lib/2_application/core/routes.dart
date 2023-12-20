@@ -36,7 +36,10 @@ final routes = GoRouter(
         final itemIdValue = state.pathParameters['itemId'];
         final itemId =
             itemIdValue != null ? ItemId.fromUniqueString(itemIdValue) : null;
-        return CollectionItemDetailSmallPage(selectedItem: itemId);
+        return CollectionItemDetailPageProvider(
+          selectedItem: itemId,
+          showAppBar: true,
+        );
       },
     ),
   ],
