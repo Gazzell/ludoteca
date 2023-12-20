@@ -6,12 +6,16 @@ class FullItem extends Item {
   final String? author;
   final String? longDescription;
   final DateTime? adquisitionDate;
-  
+
   const FullItem({
     required ItemId id,
     required String title,
     required ItemStatus status,
     required String imageUrl,
+    int? minAge,
+    int? minPlayers,
+    int? maxPlayers,
+    int? playingTime,
     this.publisher,
     this.author,
     this.longDescription,
@@ -21,6 +25,10 @@ class FullItem extends Item {
           title: title,
           status: status,
           imageUrl: imageUrl,
+          minAge: minAge,
+          minPlayers: minPlayers,
+          maxPlayers: maxPlayers,
+          playingTime: playingTime,
         );
 
   factory FullItem.empty() {
@@ -38,6 +46,10 @@ class FullItem extends Item {
         title,
         status,
         imageUrl,
+        minAge,
+        minPlayers,
+        maxPlayers,
+        playingTime,
         publisher,
         author,
         longDescription,

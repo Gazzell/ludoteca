@@ -15,20 +15,36 @@ class CollectionRepositoryMock implements CollectionRepository {
 
   late Map<String, Item> _itemCollection;
 
+  final ages = [0, 5, 8, 10, 12, 14, 18];
+
+  final times = [5, 15, 30, 45, 60, 120, 180];
+
   CollectionRepositoryMock() {
-    _itemCollection = {
-      for (var element in _itemIds)
-        element.value: Item(
-          id: element,
-          title:
-              'Title of ${element.value} ${Random().nextInt(4) % 4 == 0 ? 'with a very long title and far more long, even too long' : ''}',
-          status: Random().nextInt(5) % 5 == 0
-              ? ItemStatus.unavailable
-              : ItemStatus.available,
-          imageUrl:
-              'https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__imagepagezoom/img/7a0LOL48K-7JNIOSGtcsNsIxkN0=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic3490053.jpg',
-        ),
-    };
+    _itemCollection = Map.fromEntries(
+      _itemIds.map(
+        (item) {
+          final minPlayers = Random().nextInt(2) + 1;
+          final maxPlayers = Random().nextInt(4) + minPlayers;
+          return MapEntry(
+            item.value,
+            Item(
+              id: item,
+              title:
+                  'Title of ${item.value} ${Random().nextInt(4) % 4 == 0 ? 'with a very long title and far more long, even too long' : ''}',
+              status: Random().nextInt(5) % 5 == 0
+                  ? ItemStatus.unavailable
+                  : ItemStatus.available,
+              imageUrl:
+                  'https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__imagepagezoom/img/7a0LOL48K-7JNIOSGtcsNsIxkN0=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic3490053.jpg',
+              minAge: ages[Random().nextInt(ages.length)],
+              minPlayers: minPlayers,
+              maxPlayers: maxPlayers,
+              playingTime: times[Random().nextInt(times.length)],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -56,6 +72,10 @@ class CollectionRepositoryMock implements CollectionRepository {
           imageUrl: item.imageUrl,
           title: item.title,
           status: item.status,
+          minAge: item.minAge,
+          minPlayers: item.minPlayers,
+          maxPlayers: item.maxPlayers,
+          playingTime: item.playingTime,
           adquisitionDate: DateTime.now(),
           publisher: 'publisher',
           author: 'author',

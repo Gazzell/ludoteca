@@ -11,13 +11,14 @@ void main() {
       expect(item.title, '');
       expect(item.status, ItemStatus.available);
       expect(item.imageUrl, '');
+      expect(item.minAge, 0);
     });
 
     test('should create an identical Item', () {
       final item = Item(
         id: ItemId.fromUniqueString('1'),
         title: 'title',
-        status: ItemStatus.unavailable
+        status: ItemStatus.unavailable,
       );
 
       final item2 = Item(
@@ -25,6 +26,7 @@ void main() {
         title: 'title',
         status: ItemStatus.unavailable,
         imageUrl: '',
+        minAge: 0,
       );
 
       expect(item, item2);
