@@ -45,7 +45,6 @@ class CollectionListItem extends StatelessWidget {
               ),
               Flexible(
                 flex: 5,
-                // fit: FlexFit.tight,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(

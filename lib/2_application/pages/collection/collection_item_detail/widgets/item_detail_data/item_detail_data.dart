@@ -13,34 +13,40 @@ class ItemDetailData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minHeight: MediaQuery.of(context).size.height * 0.66,
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: ItemDetailDataHeader(title: itemDetail.title),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: ItemPlayProperties(
-              minAge: itemDetail.minAge,
-              minPlayers: itemDetail.minPlayers,
-              maxPlayers: itemDetail.maxPlayers,
-              playingTime: itemDetail.playingTime,
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: ItemDetailDataHeader(title: itemDetail.title),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(itemDetail.longDescription ?? 'itemDetail.description'),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: ItemPlayProperties(
+                minAge: itemDetail.minAge,
+                minPlayers: itemDetail.minPlayers,
+                maxPlayers: itemDetail.maxPlayers,
+                playingTime: itemDetail.playingTime,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child:
+                  Text(itemDetail.longDescription ?? 'itemDetail.description'),
+            )
+          ],
+        ),
       ),
     );
   }
