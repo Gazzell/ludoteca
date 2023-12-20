@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
+import 'package:ludoteca/2_application/pages/collection/widgets/item_play_properties.dart';
 
 class CollectionListItem extends StatelessWidget {
   final Item item;
@@ -30,23 +31,47 @@ class CollectionListItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
+              Flexible(
                 flex: 2,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(item.imageUrl),
+                  child: Image.network(
+                    item.imageUrl,
+                    width: 150,
+                  ),
                 ),
               ),
-              Expanded(
+              Flexible(
                 flex: 5,
+                // fit: FlexFit.tight,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    item.title,
-                    style: textTheme.headlineMedium,
-                    textAlign: TextAlign.start,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        item.title,
+                        style: Breakpoints.medium.isActive(context)
+                            ? textTheme.titleLarge
+                            : textTheme.headlineSmall,
+                        // textAlign: TextAlign.start,
+                      ),
+                      SizedBox(
+                        height: Breakpoints.medium.isActive(context) ? 25 : 50,
+                      ),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: ItemPlayProperties(
+                          minAge: item.minAge,
+                          minPlayers: item.minPlayers,
+                          maxPlayers: item.maxPlayers,
+                          playingTime: item.playingTime,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/widgets/collection_list_item.dart';
+import 'package:ludoteca/2_application/pages/collection/widgets/item_play_properties.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
@@ -42,6 +43,7 @@ void main() {
 
       expect(find.byType(Image), findsOneWidget);
       expect(find.text('a title'), findsOneWidget);
+      expect(find.byType(ItemPlayProperties), findsOneWidget);
     });
 
     testWidgets('should emit onTap', (WidgetTester tester) async {
