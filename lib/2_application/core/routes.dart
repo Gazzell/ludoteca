@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_add_item/collection_add_item_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/collection_item_detail_page.dart';
 import 'package:ludoteca/2_application/pages/pages_shell.dart';
 
@@ -31,7 +32,7 @@ final routes = GoRouter(
     ),
     GoRoute(
       name: 'itemDetail',
-      path: '/routes/collection/:itemId',
+      path: '/routes/collection/detail/:itemId',
       builder: (context, state) {
         final itemIdValue = state.pathParameters['itemId'];
         final itemId =
@@ -42,5 +43,15 @@ final routes = GoRouter(
         );
       },
     ),
+    GoRoute(
+      name: 'addItem',
+      path: '/routes/collection/addItem',
+      builder: (context, state) {
+        return const CollectionAddItemPage(
+          showAppBar: true,
+          title: 'Add Item',
+        );
+      },
+    )
   ],
 );
