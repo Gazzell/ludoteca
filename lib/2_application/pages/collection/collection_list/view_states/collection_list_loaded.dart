@@ -34,6 +34,12 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
       }
     }
 
+    onAddItemTap() {
+      if (Breakpoints.small.isActive(context)) {
+        context.pushNamed('addItem');
+      }
+    }
+
     return BlocListener<CollectionCubit, CollectionCubitState>(
       listener: (context, state) {
         if (state is CollectionItemSelectedState) {
@@ -50,16 +56,22 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
           }
           return true;
         },
-        child: Center(
-          child: ListView.builder(
-            itemCount: widget.items.length,
-            itemBuilder: (context, index) {
-              return CollectionListItem(
-                item: widget.items[index],
-                selected: selectedItemId == widget.items[index].id,
-                onTap: () => onItemTap(index),
-              );
-            },
+        child: Scaffold(
+          body: Center(
+            child: ListView.builder(
+              itemCount: widget.items.length,
+              itemBuilder: (context, index) {
+                return CollectionListItem(
+                  item: widget.items[index],
+                  selected: selectedItemId == widget.items[index].id,
+                  onTap: () => onItemTap(index),
+                );
+              },
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: onAddItemTap,
+            child: const Icon(Icons.add),
           ),
         ),
       ),
