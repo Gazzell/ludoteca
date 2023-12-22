@@ -10,6 +10,8 @@ import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.d
 import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
+import '../../../../../mocks/go_route_mock.dart';
+
 class MockCollectionCubit extends MockCubit<CollectionCubitState>
     implements CollectionCubit {}
 
@@ -17,13 +19,17 @@ void main() {
   Widget widgetUnderTest({
     required List<Item> items,
     required CollectionCubit cubit,
+    required MockGoRouter router,
   }) {
     return MaterialApp(
       home: BlocProvider(
         create: (context) => cubit,
-        child: Material(
-          child: CollectionListLoaded(
-            items: items,
+        child: MockGoRouterProvider(
+          goRouter: router,
+          child: Material(
+            child: CollectionListLoaded(
+              items: items,
+            ),
           ),
         ),
       ),
@@ -34,7 +40,11 @@ void main() {
     'CollectionListLoaded view state',
     () {
       late MockCollectionCubit mockCollectionCubit;
-      setUp(() => mockCollectionCubit = MockCollectionCubit());
+      late MockGoRouter mockGoRouter;
+      setUp(() {
+        mockCollectionCubit = MockCollectionCubit();
+        mockGoRouter = MockGoRouter();
+      });
 
       testWidgets(
         'should render a list of card items',
@@ -55,6 +65,7 @@ void main() {
                   (index) => Item.empty(),
                 ),
                 cubit: mockCollectionCubit,
+                router: mockGoRouter,
               ),
             ),
           );
@@ -89,6 +100,7 @@ void main() {
                   growable: false,
                 ),
                 cubit: mockCollectionCubit,
+                router: mockGoRouter,
               ),
             ),
           );
@@ -105,6 +117,41 @@ void main() {
           ).called(1);
         },
       );
+
+      testWidgets('should navigate to add item page',
+          (WidgetTester tester) async {
+        tester.view.physicalSize = const Size(300, 200);
+        tester.view.devicePixelRatio = 1;
+
+        addTearDown(tester.view.resetPhysicalSize);
+
+        whenListen(
+          mockCollectionCubit,
+          Stream.fromIterable(
+            [const CollectionItemSelectedState(selectedItem: null)],
+          ),
+          initialState: const CollectionItemSelectedState(selectedItem: null),
+        );
+
+        when(() => mockGoRouter.pushNamed('addItem'))
+            .thenAnswer((invocation) async => null);
+
+        await tester.pumpWidget(widgetUnderTest(
+          items: [],
+          cubit: mockCollectionCubit,
+          router: mockGoRouter,
+        ));
+
+        final addButton = find.byType(FloatingActionButton);
+
+        expect(addButton, findsOneWidget);
+
+        verifyNever(() => mockGoRouter.pushNamed('addItem'));
+
+        await tester.tap(addButton);
+
+        verify(() => mockGoRouter.pushNamed('addItem')).called(1);
+      });
     },
   );
 }
