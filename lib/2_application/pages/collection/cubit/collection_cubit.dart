@@ -11,4 +11,8 @@ class CollectionCubit extends Cubit<CollectionCubitState> {
   void selectItem(ItemId? selectedItem) {
     emit(CollectionItemSelectedState(selectedItem: selectedItem));
   }
+
+  void setAddingItem() {
+    emit(const CollectionItemAddingState());
+  }
 }

@@ -15,3 +15,7 @@ final class CollectionItemSelectedState extends CollectionCubitState {
   @override
   List<Object?> get props => [selectedItem];
 }
+
+final class CollectionItemAddingState extends CollectionCubitState {
+  const CollectionItemAddingState();
+}
