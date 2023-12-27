@@ -59,7 +59,7 @@ void main() {
       await mockNetworkImages(
         () async => tester.pumpWidget(widgetUnderTest(
           item: item,
-          onTap: mockOnTap,
+          onTap: mockOnTap.call,
         )),
       );
 
