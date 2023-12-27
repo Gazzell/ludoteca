@@ -19,7 +19,7 @@ class UniqueId with EquatableMixin {
 }
 
 class ItemId extends UniqueId {
-  const ItemId._(String value) : super._(value);
+  const ItemId._(super.value) : super._();
 
   factory ItemId() {
     return ItemId._(const Uuid().v4());

@@ -8,28 +8,19 @@ class FullItem extends Item {
   final DateTime? adquisitionDate;
 
   const FullItem({
-    required ItemId id,
-    required String title,
-    required ItemStatus status,
-    required String imageUrl,
-    int? minAge,
-    int? minPlayers,
-    int? maxPlayers,
-    int? playingTime,
+    required super.id,
+    required super.title,
+    required super.status,
+    required String super.imageUrl,
+    super.minAge = null,
+    super.minPlayers,
+    super.maxPlayers,
+    super.playingTime,
     this.publisher,
     this.author,
     this.longDescription,
     this.adquisitionDate,
-  }) : super(
-          id: id,
-          title: title,
-          status: status,
-          imageUrl: imageUrl,
-          minAge: minAge,
-          minPlayers: minPlayers,
-          maxPlayers: maxPlayers,
-          playingTime: playingTime,
-        );
+  });
 
   factory FullItem.empty() {
     return FullItem(
