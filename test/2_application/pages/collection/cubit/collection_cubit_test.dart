@@ -22,6 +22,13 @@ void main() {
           )
         ],
       );
+
+      blocTest(
+        '[CollectionItemAddingState] when setting add mode',
+        build: () => CollectionCubit(),
+        act: (cubit) => cubit.setAddingItem(),
+        expect: () => const <CollectionCubitState>[CollectionItemAddingState()],
+      );
     });
   });
 }

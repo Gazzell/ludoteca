@@ -35,8 +35,12 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
     }
 
     onAddItemTap() {
+      debugPrint(MediaQuery.of(context).size.toString());
       if (Breakpoints.small.isActive(context)) {
         context.pushNamed('addItem');
+      } else {
+        final collectionCubit = context.read<CollectionCubit>();
+        collectionCubit.setAddingItem();
       }
     }
 
