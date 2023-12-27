@@ -36,95 +36,17 @@ void main() {
     );
   }
 
-  group(
-    'CollectionListLoaded view state',
-    () {
-      late MockCollectionCubit mockCollectionCubit;
-      late MockGoRouter mockGoRouter;
-      setUp(() {
-        mockCollectionCubit = MockCollectionCubit();
-        mockGoRouter = MockGoRouter();
-      });
+  group('CollectionListLoaded view state', () {
+    late MockCollectionCubit mockCollectionCubit;
+    late MockGoRouter mockGoRouter;
+    setUp(() {
+      mockCollectionCubit = MockCollectionCubit();
+      mockGoRouter = MockGoRouter();
+    });
 
-      testWidgets(
-        'should render a list of card items',
-        (WidgetTester widgetTester) async {
-          whenListen(
-            mockCollectionCubit,
-            Stream.fromIterable(
-              [const CollectionItemSelectedState(selectedItem: null)],
-            ),
-            initialState: const CollectionItemSelectedState(selectedItem: null),
-          );
-
-          await mockNetworkImages(
-            () async => widgetTester.pumpWidget(
-              widgetUnderTest(
-                items: List<Item>.generate(
-                  2,
-                  (index) => Item.empty(),
-                ),
-                cubit: mockCollectionCubit,
-                router: mockGoRouter,
-              ),
-            ),
-          );
-
-          await widgetTester.pumpAndSettle();
-
-          expect(find.byType(CollectionListItem), findsNWidgets(2));
-        },
-      );
-
-      testWidgets(
-        'should select item',
-        (WidgetTester widgetTester) async {
-          whenListen(
-            mockCollectionCubit,
-            Stream.fromIterable(
-              [const CollectionItemSelectedState(selectedItem: null)],
-            ),
-            initialState: const CollectionItemSelectedState(selectedItem: null),
-          );
-
-          await mockNetworkImages(
-            () async => widgetTester.pumpWidget(
-              widgetUnderTest(
-                items: List<Item>.generate(
-                  2,
-                  (index) => Item(
-                    id: ItemId.fromUniqueString('$index'),
-                    title: '',
-                    status: ItemStatus.available,
-                  ),
-                  growable: false,
-                ),
-                cubit: mockCollectionCubit,
-                router: mockGoRouter,
-              ),
-            ),
-          );
-
-          await widgetTester.pumpAndSettle();
-
-          final cards = find.byType(CollectionListItem);
-
-          await widgetTester.tap(cards.at(1));
-          await widgetTester.pumpAndSettle();
-
-          verify(
-            () => mockCollectionCubit.selectItem(ItemId.fromUniqueString('1')),
-          ).called(1);
-        },
-      );
-
-      testWidgets('should navigate to add item page',
-          (WidgetTester tester) async {
-        tester.view.physicalSize = const Size(300, 200);
-        tester.view.devicePixelRatio = 1;
-
-        addTearDown(tester.view.resetPhysicalSize);
-
+    testWidgets(
+      'should render a list of card items',
+      (WidgetTester widgetTester) async {
         whenListen(
           mockCollectionCubit,
           Stream.fromIterable(
@@ -133,25 +55,135 @@ void main() {
           initialState: const CollectionItemSelectedState(selectedItem: null),
         );
 
-        when(() => mockGoRouter.pushNamed('addItem'))
-            .thenAnswer((invocation) async => null);
+        await mockNetworkImages(
+          () async => widgetTester.pumpWidget(
+            widgetUnderTest(
+              items: List<Item>.generate(
+                2,
+                (index) => Item.empty(),
+              ),
+              cubit: mockCollectionCubit,
+              router: mockGoRouter,
+            ),
+          ),
+        );
 
-        await tester.pumpWidget(widgetUnderTest(
-          items: [],
-          cubit: mockCollectionCubit,
-          router: mockGoRouter,
-        ));
+        await widgetTester.pumpAndSettle();
 
-        final addButton = find.byType(FloatingActionButton);
+        expect(find.byType(CollectionListItem), findsNWidgets(2));
+      },
+    );
 
-        expect(addButton, findsOneWidget);
+    testWidgets(
+      'should select item',
+      (WidgetTester widgetTester) async {
+        whenListen(
+          mockCollectionCubit,
+          Stream.fromIterable(
+            [const CollectionItemSelectedState(selectedItem: null)],
+          ),
+          initialState: const CollectionItemSelectedState(selectedItem: null),
+        );
 
-        verifyNever(() => mockGoRouter.pushNamed('addItem'));
+        await mockNetworkImages(
+          () async => widgetTester.pumpWidget(
+            widgetUnderTest(
+              items: List<Item>.generate(
+                2,
+                (index) => Item(
+                  id: ItemId.fromUniqueString('$index'),
+                  title: '',
+                  status: ItemStatus.available,
+                ),
+                growable: false,
+              ),
+              cubit: mockCollectionCubit,
+              router: mockGoRouter,
+            ),
+          ),
+        );
 
-        await tester.tap(addButton);
+        await widgetTester.pumpAndSettle();
 
-        verify(() => mockGoRouter.pushNamed('addItem')).called(1);
-      });
-    },
-  );
+        final cards = find.byType(CollectionListItem);
+
+        await widgetTester.tap(cards.at(1));
+        await widgetTester.pumpAndSettle();
+
+        verify(
+          () => mockCollectionCubit.selectItem(ItemId.fromUniqueString('1')),
+        ).called(1);
+      },
+    );
+
+    testWidgets('should navigate to add item page',
+        (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(300, 200);
+      tester.view.devicePixelRatio = 1;
+
+      addTearDown(tester.view.resetPhysicalSize);
+
+      whenListen(
+        mockCollectionCubit,
+        Stream.fromIterable(
+          [const CollectionItemSelectedState(selectedItem: null)],
+        ),
+        initialState: const CollectionItemSelectedState(selectedItem: null),
+      );
+
+      when(() => mockGoRouter.pushNamed('addItem'))
+          .thenAnswer((invocation) async => null);
+
+      await tester.pumpWidget(widgetUnderTest(
+        items: [],
+        cubit: mockCollectionCubit,
+        router: mockGoRouter,
+      ));
+
+      final addButton = find.byType(FloatingActionButton);
+
+      expect(addButton, findsOneWidget);
+
+      verifyNever(() => mockGoRouter.pushNamed('addItem'));
+
+      await tester.tap(addButton);
+
+      verify(() => mockGoRouter.pushNamed('addItem')).called(1);
+    });
+
+    testWidgets('should set add item page in large screen',
+        (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(600, 200);
+      tester.view.devicePixelRatio = 1;
+
+      addTearDown(tester.view.resetPhysicalSize);
+
+      whenListen(
+        mockCollectionCubit,
+        Stream.fromIterable(
+          [const CollectionItemSelectedState(selectedItem: null)],
+        ),
+        initialState: const CollectionItemSelectedState(selectedItem: null),
+      );
+
+      when(() => mockGoRouter.pushNamed('addItem'))
+          .thenAnswer((invocation) async => null);
+
+      await tester.pumpWidget(widgetUnderTest(
+        items: [],
+        cubit: mockCollectionCubit,
+        router: mockGoRouter,
+      ));
+
+      final addButton = find.byType(FloatingActionButton);
+
+      expect(addButton, findsOneWidget);
+
+      verifyNever(() => mockCollectionCubit.setAddingItem());
+
+      await tester.tap(addButton);
+
+      verify(() => mockCollectionCubit.setAddingItem()).called(1);
+    });
+  });
 }

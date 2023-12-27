@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ludoteca/2_application/core/page_config.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_add_item/collection_add_item_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/collection_item_detail_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/collection_list_page.dart';
 import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.dart';
@@ -50,6 +51,10 @@ class _CollectionPageState extends State<CollectionPage> {
               builder: (context) {
                 return BlocBuilder<CollectionCubit, CollectionCubitState>(
                   builder: (context, state) {
+                    if (state is CollectionItemAddingState) {
+                      return const CollectionAddItemPage();
+                    }
+
                     final selectedItem = (state is CollectionItemSelectedState)
                         ? state.selectedItem
                         : null;
