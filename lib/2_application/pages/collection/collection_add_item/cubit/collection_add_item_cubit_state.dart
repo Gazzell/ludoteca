@@ -1,0 +1,32 @@
+part of 'collection_add_item_cubit.dart';
+
+sealed class CollectionAddItemCubitState extends Equatable {
+  const CollectionAddItemCubitState();
+
+  @override
+  List<Object> get props => [];
+}
+
+final class CollectionAddItemLoadingState
+    extends CollectionAddItemCubitState {
+  const CollectionAddItemLoadingState();
+}
+
+final class CollectionAddItemErrorState
+    extends CollectionAddItemCubitState {
+  const CollectionAddItemErrorState();
+}
+
+final class CollectionAddItemLoadedState
+    extends CollectionAddItemCubitState {
+  final FullItem itemDetail;
+  const CollectionAddItemLoadedState({required this.itemDetail}) : super();
+
+  @override
+  List<Object> get props => [itemDetail];
+}
+
+final class CollectionAddItemEmptyState
+    extends CollectionAddItemCubitState {
+  const CollectionAddItemEmptyState();
+}
