@@ -47,7 +47,7 @@ final routes = GoRouter(
       name: 'addItem',
       path: '/routes/collection/addItem',
       builder: (context, state) {
-        return const CollectionAddItemPage(
+        return const CollectionAddItemPageProvider(
           showAppBar: true,
           title: 'Add Item',
         );

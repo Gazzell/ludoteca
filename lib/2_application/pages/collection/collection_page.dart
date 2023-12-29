@@ -52,7 +52,7 @@ class _CollectionPageState extends State<CollectionPage> {
                 return BlocBuilder<CollectionCubit, CollectionCubitState>(
                   builder: (context, state) {
                     if (state is CollectionItemAddingState) {
-                      return const CollectionAddItemPage();
+                      return const CollectionAddItemPageProvider();
                     }
 
                     final selectedItem = (state is CollectionItemSelectedState)
