@@ -9,29 +9,45 @@ enum ItemStatus {
 class Item extends Equatable {
   final ItemId id;
   final String title;
-  final ItemStatus status;
-  final String imageUrl;
+  final List<String> instances;
+  final String? bggId;
+  final String? imageUrl;
+  final String? thumbnailUrl;
+  final String? description;
   final int? minAge;
   final int? minPlayers;
   final int? maxPlayers;
   final int? playingTime;
+  final String? author;
+  final String? publisher;
+  final int? publishYear;
+  final double? complexity;
+  final double? rating;
 
   const Item({
     required this.id,
     required this.title,
-    required this.status,
-    String? imageUrl,
+    required this.instances,
+    this.bggId,
+    this.imageUrl,
+    this.thumbnailUrl,
+    this.description,
     this.minAge = 0,
     this.minPlayers,
     this.maxPlayers,
     this.playingTime,
-  }) : imageUrl = imageUrl ?? '';
+    this.author,
+    this.publisher,
+    this.publishYear,
+    this.complexity,
+    this.rating,
+  });
 
   factory Item.empty() {
     return Item(
       id: ItemId(),
       title: '',
-      status: ItemStatus.available,
+      instances: const [],
     );
   }
 
@@ -39,11 +55,19 @@ class Item extends Equatable {
   List<Object?> get props => [
         id,
         title,
-        status,
+        instances,
+        bggId,
         imageUrl,
+        thumbnailUrl,
+        description,
         minAge,
         minPlayers,
         maxPlayers,
         playingTime,
+        author,
+        publisher,
+        publishYear,
+        complexity,
+        rating,
       ];
 }

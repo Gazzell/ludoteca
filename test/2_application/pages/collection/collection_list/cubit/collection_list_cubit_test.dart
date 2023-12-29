@@ -51,7 +51,7 @@ void main() {
               Item(
                 id: ItemId.fromUniqueString('0'),
                 title: 'title',
-                status: ItemStatus.available,
+                instances: const [],
               )
             ]),
           ),
@@ -66,7 +66,7 @@ void main() {
               Item(
                 id: ItemId.fromUniqueString('0'),
                 title: 'title',
-                status: ItemStatus.available,
+                instances: const [],
               ),
             ],
           ),

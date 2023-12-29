@@ -93,7 +93,7 @@ void main() {
                 (index) => Item(
                   id: ItemId.fromUniqueString('$index'),
                   title: '',
-                  status: ItemStatus.available,
+                  instances: const[],
                 ),
                 growable: false,
               ),

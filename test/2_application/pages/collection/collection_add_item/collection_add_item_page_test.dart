@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ludoteca/1_domain/entities/full_item.dart';
+import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/collection_add_item_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/cubit/collection_add_item_cubit.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/view_states/collection_add_item_error.dart';
@@ -119,13 +119,13 @@ void main() {
     testWidgets(
       'with [CollectionAddItemLoadedState] renders a CollectionAddItemLoaded',
       (WidgetTester tester) async {
-        final fullItem = FullItem.empty();
+        final fullItem = Item.empty();
         whenListen(
           mockCollectionAddItemCubit,
           Stream.fromIterable(
             [
               const CollectionAddItemEmptyState(),
-              CollectionAddItemLoadedState(itemDetail: fullItem),
+              CollectionAddItemLoadedState(item: fullItem),
             ],
           ),
           initialState: const CollectionAddItemEmptyState(),

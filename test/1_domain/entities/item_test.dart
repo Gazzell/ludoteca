@@ -9,8 +9,7 @@ void main() {
 
       expect(item.id.value, isNot(''));
       expect(item.title, '');
-      expect(item.status, ItemStatus.available);
-      expect(item.imageUrl, '');
+      expect(item.instances, []);
       expect(item.minAge, 0);
     });
 
@@ -18,14 +17,13 @@ void main() {
       final item = Item(
         id: ItemId.fromUniqueString('1'),
         title: 'title',
-        status: ItemStatus.unavailable,
+        instances: const [],
       );
 
       final item2 = Item(
         id: ItemId.fromUniqueString('1'),
         title: 'title',
-        status: ItemStatus.unavailable,
-        imageUrl: '',
+        instances: const [],
         minAge: 0,
       );
 

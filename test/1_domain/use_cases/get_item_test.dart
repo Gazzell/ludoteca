@@ -1,38 +1,45 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ludoteca/1_domain/entities/full_item.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/failures/failures.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
-import 'package:ludoteca/1_domain/use_cases/get_full_item.dart';
+import 'package:ludoteca/1_domain/use_cases/get_item.dart';
 import 'package:ludoteca/1_domain/use_cases/use_case.dart';
 import 'package:mocktail/mocktail.dart';
 
 class CollectionRepositoryMock extends Mock implements CollectionRepository {}
 
 void main() {
-  final itemDetail = FullItem(
+  final fakeItem = Item(
     id: ItemId.fromUniqueString('0'),
     title: 'title',
-    status: ItemStatus.available,
+    instances: const [],
+    bggId: '122',
     imageUrl: '',
+    thumbnailUrl: '',
+    description: 'longDescription',
+    minPlayers: 1,
+    maxPlayers: 4,
+    playingTime: 130,
     author: 'author',
     publisher: 'publisher',
-    longDescription: 'longDescription',
-    adquisitionDate: DateTime.now(),
+    publishYear: 2000,
+    complexity: 3.2,
+    rating: 6.5,
   );
 
   group('GetItemDetail use case', () {
     group('should return Right', () {
       test('with an ItemDetail', () async {
         final mockCollectionRepository = CollectionRepositoryMock();
-        when(() => mockCollectionRepository
-            .readFullItem(ItemId.fromUniqueString('0'))).thenAnswer(
-          (_) async => Right(itemDetail),
+        when(() =>
+                mockCollectionRepository.readItem(ItemId.fromUniqueString('0')))
+            .thenAnswer(
+          (_) async => Right(fakeItem),
         );
 
-        final getItemDetailUseCase = GetFullItem(
+        final getItemDetailUseCase = GetItem(
           collectionRepository: mockCollectionRepository,
         );
 
@@ -42,10 +49,10 @@ void main() {
           ),
         );
 
-        expect(result, Right<Failure, FullItem>(itemDetail));
+        expect(result, Right<Failure, Item>(fakeItem));
 
         verify(
-          () => mockCollectionRepository.readFullItem(
+          () => mockCollectionRepository.readItem(
             ItemId.fromUniqueString('0'),
           ),
         ).called(1);
@@ -56,11 +63,11 @@ void main() {
       test('with a ServerFailure if threw an exception', () async {
         final mockCollectionRepository = CollectionRepositoryMock();
         when(() => mockCollectionRepository
-            .readFullItem(ItemId.fromUniqueString('0'))).thenThrow(
+            .readItem(ItemId.fromUniqueString('0'))).thenThrow(
           Exception('something went wrong'),
         );
 
-        final getItemDetailUseCase = GetFullItem(
+        final getItemDetailUseCase = GetItem(
           collectionRepository: mockCollectionRepository,
         );
 
@@ -77,7 +84,7 @@ void main() {
         );
 
         verify(
-          () => mockCollectionRepository.readFullItem(
+          () => mockCollectionRepository.readItem(
             ItemId.fromUniqueString('0'),
           ),
         ).called(1);
