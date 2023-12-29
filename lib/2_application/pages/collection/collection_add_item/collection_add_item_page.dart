@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
-import 'package:ludoteca/1_domain/use_cases/get_full_item.dart';
+import 'package:ludoteca/1_domain/use_cases/get_item.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/cubit/collection_add_item_cubit.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/view_states/collection_add_item_empty.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/view_states/collection_add_item_error.dart';
@@ -21,7 +21,7 @@ class CollectionAddItemPageProvider extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         return CollectionAddItemCubit(
-          getItemDetail: GetFullItem(
+          getItem: GetItem(
             collectionRepository:
                 RepositoryProvider.of<CollectionRepository>(context),
           ),
@@ -64,8 +64,8 @@ class CollectionAddItemPage extends StatelessWidget {
                 body = const CollectionAddItemError();
               } else if (state is CollectionAddItemLoadedState) {
                 body = CollectionAddItemLoaded(
-                  key: Key(state.itemDetail.id.value),
-                  itemDetail: state.itemDetail,
+                  key: Key(state.item.id.value),
+                  item: state.item,
                 );
               } else {
                 body = const CollectionAddItemEmpty();

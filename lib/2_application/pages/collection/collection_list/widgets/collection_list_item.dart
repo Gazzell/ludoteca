@@ -24,10 +24,8 @@ class CollectionListItem extends StatelessWidget {
       onTap: onTap,
       child: Card(
         color: selected && !Breakpoints.small.isActive(context)
-            ? colorScheme.inverseSurface
-            : item.status == ItemStatus.available
-                ? colorScheme.surface
-                : colorScheme.inversePrimary,
+            ? colorScheme.inversePrimary
+            : colorScheme.surface,
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Row(
@@ -37,10 +35,15 @@ class CollectionListItem extends StatelessWidget {
                 flex: 2,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    item.imageUrl,
-                    width: 150,
-                  ),
+                  child: item.imageUrl != null
+                      ? Image.network(
+                          item.imageUrl!,
+                          width: 150,
+                        )
+                      : const Placeholder(
+                          fallbackWidth: 150,
+                          fallbackHeight: 150,
+                        ),
                 ),
               ),
               Flexible(

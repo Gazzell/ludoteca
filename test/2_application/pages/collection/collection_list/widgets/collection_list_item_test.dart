@@ -32,7 +32,7 @@ void main() {
       final item = Item(
         id: ItemId.fromUniqueString('0'),
         title: 'a title',
-        status: ItemStatus.available,
+        instances: const[],
         imageUrl:
             'https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__imagepagezoom/img/7a0LOL48K-7JNIOSGtcsNsIxkN0=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic3490053.jpg',
       );
@@ -50,7 +50,7 @@ void main() {
       final item = Item(
         id: ItemId.fromUniqueString('0'),
         title: 'a title',
-        status: ItemStatus.available,
+        instances: const[],
         imageUrl: '',
       );
 
