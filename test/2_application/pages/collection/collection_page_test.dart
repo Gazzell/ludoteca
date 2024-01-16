@@ -4,15 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/0_data/data_sources/bgg_data_source.dart';
 import 'package:ludoteca/0_data/repositories/collection_repository_mock.dart';
-import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/collection_add_item_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/collection_item_detail_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/collection_list_page.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_list/widgets/collection_list_item.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_page.dart';
 import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
+
+import '../../../mocks/go_route_mock.dart';
 
 class MockCollectionCubit extends MockCubit<CollectionCubitState>
     implements CollectionCubit {}
@@ -20,15 +22,18 @@ class MockCollectionCubit extends MockCubit<CollectionCubitState>
 class MockBggDataSource extends Mock implements BggDataSource {}
 
 void main() {
-  Widget widgetUnderTest({required CollectionCubit cubit}) {
+  Widget widgetUnderTest({MockGoRouter? router}) {
     return MaterialApp(
       home: Material(
-        child: RepositoryProvider<CollectionRepository>(
-          create: (context) =>
-              CollectionRepositoryMock(bggDataSource: BggDataSource()),
-          child: BlocProvider(
-            create: (context) => cubit,
-            child: const CollectionPage(),
+        child: MockGoRouterProvider(
+          goRouter: router ?? MockGoRouter(),
+          child: RepositoryProvider<CollectionRepository>(
+            create: (context) =>
+                CollectionRepositoryMock(bggDataSource: BggDataSource()),
+            child: BlocProvider(
+              create: (context) => CollectionCubit(),
+              child: const CollectionPage(),
+            ),
           ),
         ),
       ),
@@ -36,56 +41,119 @@ void main() {
   }
 
   group('CollectionPage', () {
-    late MockCollectionCubit mockCollectionCubit;
-
-    setUp(() => mockCollectionCubit = MockCollectionCubit());
-
     testWidgets('should render a CollectionListPage',
         (WidgetTester tester) async {
-      whenListen(
-        mockCollectionCubit,
-        Stream.fromIterable(
-            [const CollectionItemSelectedState(selectedItem: null)]),
-        initialState: const CollectionItemSelectedState(selectedItem: null),
-      );
-      await tester.pumpWidget(widgetUnderTest(cubit: mockCollectionCubit));
+      await tester.pumpWidget(widgetUnderTest());
 
       expect(find.byType(CollectionListPage), findsOneWidget);
     });
 
     testWidgets('should render a CollectionItemDetail page',
         (WidgetTester tester) async {
-      whenListen(
-        mockCollectionCubit,
-        Stream.fromIterable([
-          CollectionItemSelectedState(
-            selectedItem: ItemId.fromUniqueString('1'),
-          )
-        ]),
-        initialState: const CollectionItemSelectedState(selectedItem: null),
-      );
+      await tester.pumpWidget(widgetUnderTest());
 
-      await tester.pumpWidget(widgetUnderTest(cubit: mockCollectionCubit));
+      expect(find.byType(CollectionItemDetailPage), findsOneWidget);
+    });
+
+    testWidgets('should navigate to item detail page on small screen',
+        (WidgetTester tester) async {
+      final mockGoRouter = MockGoRouter();
+
+      tester.view.physicalSize = const Size(300, 200);
+      tester.view.devicePixelRatio = 1;
+
+      addTearDown(tester.view.resetPhysicalSize);
+
+      when(() => mockGoRouter.pushNamed('itemDetail'))
+          .thenAnswer((invocation) async => Future.value('anything'));
+
+      await mockNetworkImages(() async {
+        await tester.pumpWidget(widgetUnderTest(router: mockGoRouter));
+        await tester.pumpAndSettle();
+      });
+
+      final item = find.byType(CollectionListItem).first;
+
+      expect(item, findsOneWidget);
+
+      await tester.tap(item);
+
+      await tester.pumpAndSettle();
+
+      verify(
+        () => mockGoRouter.pushNamed(
+          'itemDetail',
+          pathParameters: {
+            'itemId': 'item-0',
+          },
+        ),
+      ).called(1);
+    });
+
+    testWidgets('selecting item should render item detail',
+        (WidgetTester tester) async {
+      await mockNetworkImages(() async {
+        await tester.pumpWidget(widgetUnderTest());
+        await tester.pumpAndSettle();
+      });
+
+      final item = find.byType(CollectionListItem).first;
+
+      expect(item, findsOneWidget);
+
+      await tester.tap(item);
+
+      await tester.pumpAndSettle();
 
       expect(find.byType(CollectionItemDetailPage), findsOneWidget);
     });
 
     testWidgets('should render a CollectionItemAdd page',
         (WidgetTester tester) async {
-      whenListen(
-        mockCollectionCubit,
-        Stream.fromIterable([const CollectionItemAddingState()]),
-        initialState: const CollectionItemAddingState(),
-      );
-
       await mockNetworkImages(() async {
-        await tester.pumpWidget(
-          widgetUnderTest(cubit: mockCollectionCubit),
-        );
+        await tester.pumpWidget(widgetUnderTest());
         await tester.pumpAndSettle();
       });
 
+      final addButton = find.byKey(const Key('add_item_fab'));
+
+      expect(addButton, findsOneWidget);
+
+      await tester.tap(addButton);
+
+      await tester.pumpAndSettle();
+
       expect(find.byType(CollectionAddItemPage), findsOneWidget);
+    });
+
+    testWidgets('should navigate to add item page on small screen',
+        (WidgetTester tester) async {
+      final mockGoRouter = MockGoRouter();
+
+      tester.view.physicalSize = const Size(300, 200);
+      tester.view.devicePixelRatio = 1;
+
+      addTearDown(tester.view.resetPhysicalSize);
+
+      when(() => mockGoRouter.pushNamed('addItem'))
+          .thenAnswer((invocation) async => null);
+
+      await mockNetworkImages(() async {
+        await tester.pumpWidget(widgetUnderTest(router: mockGoRouter));
+        await tester.pumpAndSettle();
+      });
+
+      final addButton = find.byKey(const Key('add_item_fab'));
+
+      expect(addButton, findsOneWidget);
+
+      verifyNever(() => mockGoRouter.pushNamed('addItem'));
+
+      await tester.tap(addButton);
+
+      await tester.pumpAndSettle();
+
+      verify(() => mockGoRouter.pushNamed('addItem')).called(1);
     });
   });
 }
