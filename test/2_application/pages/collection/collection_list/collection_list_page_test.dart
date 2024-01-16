@@ -27,7 +27,9 @@ void main() {
               create: (context) => CollectionCubit(),
             ),
           ],
-          child: const CollectionListPage(),
+          child: CollectionListPage(
+            onItemTapped: (id) => {},
+          ),
         ),
       ),
     );

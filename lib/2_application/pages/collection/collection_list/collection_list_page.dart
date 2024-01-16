@@ -7,8 +7,16 @@ import 'package:ludoteca/2_application/pages/collection/collection_list/view_sta
 import 'package:ludoteca/2_application/pages/collection/collection_list/view_states/collection_list_loaded.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/view_states/collection_list_loading.dart';
 
+import '../../../../1_domain/entities/unique_id.dart';
+
 class CollectionListPageProvider extends StatelessWidget {
-  const CollectionListPageProvider({super.key});
+  final Function(ItemId)? onItemTapped;
+  final ItemId? selectedItem;
+  const CollectionListPageProvider({
+    super.key,
+    this.onItemTapped,
+    this.selectedItem,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +27,22 @@ class CollectionListPageProvider extends StatelessWidget {
               RepositoryProvider.of<CollectionRepository>(context),
         ),
       )..readItems(),
-      child: const CollectionListPage(),
+      child: CollectionListPage(
+        onItemTapped: onItemTapped,
+        selectedItem: selectedItem,
+      ),
     );
   }
 }
 
 class CollectionListPage extends StatelessWidget {
-  const CollectionListPage({super.key});
+  final Function(ItemId)? onItemTapped;
+  final ItemId? selectedItem;
+  const CollectionListPage({
+    super.key,
+    required this.onItemTapped,
+    this.selectedItem,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +54,11 @@ class CollectionListPage extends StatelessWidget {
             return const CollectionListLoading();
           }
           if (state is CollectionListItemsLoadedState) {
-            return CollectionListLoaded(items: state.items);
+            return CollectionListLoaded(
+              items: state.items,
+              onItemTapped: onItemTapped,
+              selectedItem: selectedItem,
+            );
           }
           return const CollectionListError();
         },

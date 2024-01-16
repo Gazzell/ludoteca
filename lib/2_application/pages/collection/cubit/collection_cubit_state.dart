@@ -7,13 +7,8 @@ sealed class CollectionCubitState extends Equatable {
   List<Object?> get props => [];
 }
 
-final class CollectionItemSelectedState extends CollectionCubitState {
-  final ItemId? selectedItem;
-
-  const CollectionItemSelectedState({required this.selectedItem});
-
-  @override
-  List<Object?> get props => [selectedItem];
+final class CollectionShowingState extends CollectionCubitState {
+  const CollectionShowingState();
 }
 
 final class CollectionItemAddingState extends CollectionCubitState {
