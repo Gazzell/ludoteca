@@ -9,6 +9,7 @@ import 'package:ludoteca/2_application/pages/collection/collection_add_item/view
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/view_states/collection_add_item_error.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/view_states/collection_add_item_loaded.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/view_states/collection_add_item_loading.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_page.dart';
 
 class CollectionAddItemPageProvider extends StatelessWidget {
   final bool showAppBar;
@@ -27,7 +28,7 @@ class CollectionAddItemPageProvider extends StatelessWidget {
           ),
         );
       },
-      child: CollectionAddItemPage(title: title),
+      child: CollectionAddItemPage(title: title, showAppBar: showAppBar),
     );
   }
 }
@@ -50,7 +51,14 @@ class CollectionAddItemPage extends StatelessWidget {
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back),
                     onPressed: () {
-                      context.pop();
+                      if (context.canPop()) {
+                        context.pop();
+                        return;
+                      }
+                      context.goNamed(
+                        'shell',
+                        pathParameters: {'tab': CollectionPage.pageConfig.name},
+                      );
                     },
                   ),
                 )
