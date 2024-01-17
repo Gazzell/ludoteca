@@ -155,5 +155,35 @@ void main() {
 
       verify(() => mockGoRouter.pushNamed('addItem')).called(1);
     });
+
+    testWidgets(
+        'should show item detail when adding an item and selecting a different one',
+        (WidgetTester tester) async {
+      await mockNetworkImages(() async {
+        await tester.pumpWidget(widgetUnderTest());
+        await tester.pumpAndSettle();
+      });
+
+      final addButton = find.byKey(const Key('add_item_fab'));
+
+      expect(addButton, findsOneWidget);
+
+      await tester.tap(addButton);
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CollectionAddItemPage), findsOneWidget);
+
+      final item = find.byType(CollectionListItem).first;
+
+      expect(item, findsOneWidget);
+
+      await tester.tap(item);
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CollectionItemDetailPage), findsOneWidget);
+      expect(find.byType(CollectionAddItemPage), findsNothing);
+    });
   });
 }
