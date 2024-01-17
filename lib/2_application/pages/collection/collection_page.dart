@@ -45,13 +45,16 @@ class _CollectionPageState extends State<CollectionPage> {
   }
 
   onSelectionChanged(BuildContext context, ItemId? itemId) async {
-    if (Breakpoints.small.isActive(context) && itemId != null) {
-      await context.pushNamed('itemDetail', pathParameters: {
-        'itemId': itemId.value,
-      });
-      changeSelection();
-    } else {
-      changeSelection(selectedItem: itemId);
+    if (itemId != null) {
+      if (Breakpoints.small.isActive(context)) {
+        await context.pushNamed('itemDetail', pathParameters: {
+          'itemId': itemId.value,
+        });
+        changeSelection();
+      } else {
+        changeSelection(selectedItem: itemId);
+        context.read<CollectionCubit>().setShowingState();
+      }
     }
   }
 

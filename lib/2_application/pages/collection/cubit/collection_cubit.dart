@@ -10,4 +10,10 @@ class CollectionCubit extends Cubit<CollectionCubitState> {
   void setAddingItem() {
     emit(const CollectionItemAddingState());
   }
+
+  void setShowingState() {
+    if(state is! CollectionShowingState) {
+      emit(const CollectionShowingState());
+    }
+  }
 }
