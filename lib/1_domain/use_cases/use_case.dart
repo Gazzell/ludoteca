@@ -1,7 +1,9 @@
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ludoteca/1_domain/entities/unique_id.dart';
-import 'package:ludoteca/1_domain/failures/failures.dart';
+
+import '../entities/unique_id.dart';
+import '../failures/failures.dart';
+import '../entities/item.dart';
 
 abstract class UseCase<Type, Params> {
   Future<Either<Failure, Type>> call(Params params);
@@ -21,4 +23,13 @@ class ItemParams extends Params {
 
   @override
   List<Object?> get props => [itemId];
+}
+
+class AddItemParams extends Params {
+  final Item item;
+
+  AddItemParams({required this.item});
+
+  @override
+  List<Object?> get props => [item];
 }

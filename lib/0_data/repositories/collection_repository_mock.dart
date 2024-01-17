@@ -75,6 +75,13 @@ class CollectionRepositoryMock implements CollectionRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, Item>> addItem(Item item) {
+    _itemIds.add(item.id);
+    _itemCollection[item.id.value] = item;
+    return Future.value(Right(item));
+  }
+
   Item modelToItem({required ItemModel itemModel}) {
     return Item(
       id: ItemId.fromUniqueString(itemModel.id),
