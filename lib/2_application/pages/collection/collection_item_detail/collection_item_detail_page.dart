@@ -10,6 +10,8 @@ import 'package:ludoteca/2_application/pages/collection/collection_item_detail/v
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_loaded.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_loading.dart';
 
+import '../collection_page.dart';
+
 class CollectionItemDetailPageProvider extends StatelessWidget {
   final ItemId? selectedItem;
   final bool showAppBar;
@@ -58,7 +60,14 @@ class CollectionItemDetailPage extends StatelessWidget {
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
-                    context.pop();
+                    if (context.canPop()) {
+                      context.pop();
+                      return;
+                    }
+                    context.goNamed(
+                      'shell',
+                      pathParameters: {'tab': CollectionPage.pageConfig.name},
+                    );
                   },
                 ),
               )
