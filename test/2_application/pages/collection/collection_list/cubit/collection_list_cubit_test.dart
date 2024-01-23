@@ -43,7 +43,7 @@ void main() {
       );
 
       blocTest(
-        'CollectionListLoadedState when readItemIds succeeds',
+        'CollectionListItemsLoadedState when readItemIds succeeds',
         setUp: () => when(() => mockGetCollectionItemsUseCase.call(NoParams()))
             .thenAnswer(
           (invocation) => Future.value(
@@ -73,5 +73,32 @@ void main() {
         ],
       );
     });
+
+    blocTest(
+      'CollectionListItemsLoadedState when collection is updated',
+      build: () => CollectionListCubit(
+        getCollectionItems: mockGetCollectionItemsUseCase,
+      ),
+      act: (cubit) => cubit.updateCollection(
+        [
+          Item(
+            id: ItemId.fromUniqueString('0'),
+            title: 'title',
+            instances: const [],
+          ),
+        ],
+      ),
+      expect: () => <CollectionListCubitState>[
+        CollectionListItemsLoadedState(
+          items: [
+            Item(
+              id: ItemId.fromUniqueString('0'),
+              title: 'title',
+              instances: const [],
+            ),
+          ],
+        ),
+      ],
+    );
   });
 }

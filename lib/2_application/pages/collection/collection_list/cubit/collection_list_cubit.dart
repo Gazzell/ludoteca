@@ -14,7 +14,7 @@ class CollectionListCubit extends Cubit<CollectionListCubitState> {
     CollectionListCubitState? initialState,
   }) : super(initialState ?? const CollectionListLoadingState());
 
-  Future<void> readItems() async {
+  void readItems() async {
     final items = await getCollectionItems(NoParams());
 
     if (items.isLeft) {
@@ -22,5 +22,9 @@ class CollectionListCubit extends Cubit<CollectionListCubitState> {
     } else {
       emit(CollectionListItemsLoadedState(items: items.right));
     }
+  }
+
+  void updateCollection(List<Item> items) {
+    emit(CollectionListItemsLoadedState(items: items));
   }
 }

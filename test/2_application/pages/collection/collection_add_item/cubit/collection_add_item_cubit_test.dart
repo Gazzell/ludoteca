@@ -5,15 +5,20 @@ import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/failures/failures.dart';
 import 'package:ludoteca/1_domain/use_cases/get_item.dart';
+import 'package:ludoteca/1_domain/use_cases/add_collection_item.dart';
 import 'package:ludoteca/1_domain/use_cases/use_case.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/cubit/collection_add_item_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockGetItemDetailUseCase extends Mock implements GetItem {}
 
+class MockAddCollectionItemUseCase extends Mock implements AddCollectionItem {}
+
 void main() {
   group('CollectionAddItemCubit', () {
     final mockGetItemDetailUseCase = MockGetItemDetailUseCase();
+    final mockAddCollectionItemUseCase = MockAddCollectionItemUseCase();
+
     final fakeItem = Item(
       id: ItemId.fromUniqueString('itemId'),
       title: 'title',
@@ -37,6 +42,7 @@ void main() {
         'nothing when no method is called',
         build: () => CollectionAddItemCubit(
           getItem: mockGetItemDetailUseCase,
+          addItem: mockAddCollectionItemUseCase,
         ),
         expect: () => const <CollectionAddItemCubitState>[],
       );
@@ -52,6 +58,7 @@ void main() {
         ).thenAnswer((invocation) => Future.value(Left(ServerFailure()))),
         build: () => CollectionAddItemCubit(
           getItem: mockGetItemDetailUseCase,
+          addItem: mockAddCollectionItemUseCase,
         ),
         act: (cubit) => cubit.readItemDetail(ItemId.fromUniqueString('itemId')),
         expect: () => const <CollectionAddItemCubitState>[
@@ -71,11 +78,50 @@ void main() {
         ).thenAnswer((invocation) => Future.value(Right(fakeItem))),
         build: () => CollectionAddItemCubit(
           getItem: mockGetItemDetailUseCase,
+          addItem: mockAddCollectionItemUseCase,
         ),
         act: (cubit) => cubit.readItemDetail(ItemId.fromUniqueString('itemId')),
         expect: () => <CollectionAddItemCubitState>[
           const CollectionAddItemLoadingState(),
           CollectionAddItemLoadedState(item: fakeItem),
+        ],
+      );
+
+      blocTest(
+        'CollectionAddItemErrorState when addCollectionItem fails',
+        setUp: () => when(
+          () => mockAddCollectionItemUseCase.call(
+            AddItemParams(item: fakeItem),
+          ),
+        ).thenAnswer((invocation) => Future.value(Left(ServerFailure()))),
+        build: () => CollectionAddItemCubit(
+          getItem: mockGetItemDetailUseCase,
+          addItem: mockAddCollectionItemUseCase,
+        ),
+        act: (cubit) => cubit.addCollectionItem(fakeItem),
+        expect: () => const <CollectionAddItemCubitState>[
+          CollectionAddItemLoadingState(),
+          CollectionAddItemErrorState(),
+        ],
+      );
+
+      blocTest(
+        'CollectionAddItemAddedState when addCollectionItem succeds',
+        setUp: () => when(
+          () => mockAddCollectionItemUseCase.call(
+            AddItemParams(
+              item: fakeItem,
+            ),
+          ),
+        ).thenAnswer((invocation) => Future.value(Right(fakeItem))),
+        build: () => CollectionAddItemCubit(
+          getItem: mockGetItemDetailUseCase,
+          addItem: mockAddCollectionItemUseCase,
+        ),
+        act: (cubit) => cubit.addCollectionItem(fakeItem),
+        expect: () => <CollectionAddItemCubitState>[
+          const CollectionAddItemLoadingState(),
+          CollectionAddItemAddedState(item: fakeItem),
         ],
       );
     });

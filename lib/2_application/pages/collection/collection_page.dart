@@ -8,6 +8,7 @@ import 'package:ludoteca/2_application/pages/collection/collection_item_detail/c
 import 'package:ludoteca/2_application/pages/collection/collection_list/collection_list_page.dart';
 import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.dart';
 
+import '../../../1_domain/entities/item.dart';
 import '../../../1_domain/entities/unique_id.dart';
 
 class CollectionPageProvider extends StatelessWidget {
@@ -61,13 +62,21 @@ class _CollectionPageState extends State<CollectionPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CollectionCubit, CollectionCubitState>(
-      listener: (context, state) {
+      listener: (context, state) async {
+        final collectionCubit = context.read<CollectionCubit>();
         if (state is CollectionItemAddingState) {
+          late Item? item;
           if (Breakpoints.small.isActive(context)) {
-            context.pushNamed('addItem');
+            item = await context.pushNamed('addItem');
+            if (item != null) {
+              collectionCubit.itemAdded(item);
+            }
           }
-
-          changeSelection();
+          return;
+        }
+        if (state is CollectionItemAddedState &&
+            Breakpoints.mediumAndUp.isActive(context)) {
+          onSelectionChanged(context, state.item.id);
         }
       },
       builder: (context, state) {

@@ -12,7 +12,7 @@ class CollectionItemDetailCubit extends Cubit<CollectionItemDetailCubitState> {
   CollectionItemDetailCubit({required this.getItem})
       : super(const CollectionItemDetailEmptyState());
 
-  Future<void> readItemDetail(ItemId? itemId) async {
+  void readItemDetail(ItemId? itemId) async {
     if (itemId == null) {
       emit(const CollectionItemDetailEmptyState());
       return;
