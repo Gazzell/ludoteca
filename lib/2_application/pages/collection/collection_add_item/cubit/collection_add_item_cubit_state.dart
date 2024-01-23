@@ -26,3 +26,11 @@ final class CollectionAddItemLoadedState extends CollectionAddItemCubitState {
 final class CollectionAddItemEmptyState extends CollectionAddItemCubitState {
   const CollectionAddItemEmptyState();
 }
+
+final class CollectionAddItemAddedState extends CollectionAddItemCubitState {
+  final Item item;
+  const CollectionAddItemAddedState({required this.item}) : super();
+
+  @override
+  List<Object> get props => [item];
+}

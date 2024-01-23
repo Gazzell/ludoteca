@@ -14,3 +14,11 @@ final class CollectionShowingState extends CollectionCubitState {
 final class CollectionItemAddingState extends CollectionCubitState {
   const CollectionItemAddingState();
 }
+
+final class CollectionItemAddedState extends CollectionCubitState {
+  final Item item;
+  const CollectionItemAddedState({required this.item});
+
+  @override
+  List<Object?> get props => [item];
+}

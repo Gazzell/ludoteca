@@ -19,8 +19,6 @@ import '../../../mocks/go_route_mock.dart';
 class MockCollectionCubit extends MockCubit<CollectionCubitState>
     implements CollectionCubit {}
 
-class MockBggDataSource extends Mock implements BggDataSource {}
-
 void main() {
   Widget widgetUnderTest({MockGoRouter? router}) {
     return MaterialApp(

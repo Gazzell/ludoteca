@@ -3,21 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
+import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/collection_add_item_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/cubit/collection_add_item_cubit.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/view_states/collection_add_item_error.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/view_states/collection_add_item_loaded.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/view_states/collection_add_item_loading.dart';
+import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 class MockCollectionAddItemCubit extends MockCubit<CollectionAddItemCubitState>
     implements CollectionAddItemCubit {}
 
+class MockCollectionCubit extends MockCubit<CollectionCubitState>
+    implements CollectionCubit {}
+
 void main() {
   group('CollectionAddItemPage', () {
     late CollectionAddItemCubit mockCollectionAddItemCubit;
-
-    setUp(() => mockCollectionAddItemCubit = MockCollectionAddItemCubit());
+    setUp(() {
+      mockCollectionAddItemCubit = MockCollectionAddItemCubit();
+    });
 
     Widget widgetUnderTest({
       required CollectionAddItemCubit cubit,
@@ -25,8 +32,15 @@ void main() {
       String? title,
     }) {
       return MaterialApp(
-        home: BlocProvider(
-          create: (context) => cubit,
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => cubit,
+            ),
+            BlocProvider<CollectionCubit>(
+              create: (context) => MockCollectionCubit(),
+            ),
+          ],
           child: CollectionAddItemPage(
             showAppBar: showAppBar,
             title: title,
@@ -140,5 +154,57 @@ void main() {
         expect(find.byType(CollectionAddItemLoaded), findsOneWidget);
       },
     );
+
+    testWidgets('should add item to collection when add item button is pressed',
+        (WidgetTester tester) async {
+      final item = Item(
+        id: ItemId.fromUniqueString('111'),
+        title: '',
+        instances: const [],
+      );
+
+      whenListen(
+        mockCollectionAddItemCubit,
+        Stream.fromIterable([
+          const CollectionAddItemEmptyState(),
+          const CollectionAddItemLoadingState(),
+          CollectionAddItemLoadedState(item: item),
+        ]),
+        initialState: const CollectionAddItemEmptyState(),
+      );
+
+      when(() => mockCollectionAddItemCubit.state).thenReturn(
+        CollectionAddItemLoadedState(item: item),
+      );
+
+      await tester.pumpWidget(
+        widgetUnderTest(cubit: mockCollectionAddItemCubit),
+      );
+
+      await mockNetworkImages(() async => await tester.pump());
+
+      final searchBar = find.byType(SearchBar);
+      expect(searchBar, findsOneWidget);
+
+      await tester.enterText(searchBar, '111');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pump();
+
+      verify(
+        () => mockCollectionAddItemCubit
+            .readItemDetail(ItemId.fromUniqueString('111')),
+      ).called(1);
+
+      final addButton = find.byIcon(Icons.done_outline_outlined);
+      expect(addButton, findsOneWidget);
+
+      await tester.tap(addButton);
+
+      await tester.pump();
+
+      verify(
+        () => mockCollectionAddItemCubit.addCollectionItem(item),
+      ).called(1);
+    });
   });
 }
