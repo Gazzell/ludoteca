@@ -27,31 +27,32 @@ final routes = GoRouter(
             );
           },
         ),
+        GoRoute(
+          name: 'itemDetail',
+          path: '/routes/collection/detail/:itemId',
+          builder: (context, state) {
+            final itemIdValue = state.pathParameters['itemId'];
+            final itemId = itemIdValue != null
+                ? ItemId.fromUniqueString(itemIdValue)
+                : null;
+            return CollectionItemDetailPageProvider(
+              selectedItem: itemId,
+              showAppBar: true,
+            );
+          },
+        ),
+        GoRoute(
+          name: 'addItem',
+          path: '/routes/collection/addItem',
+          builder: (context, state) {
+            return const CollectionAddItemPageProvider(
+              showAppBar: true,
+              title: 'Add Item',
+            );
+          },
+        )
       ],
       builder: (context, state, child) => child,
     ),
-    GoRoute(
-      name: 'itemDetail',
-      path: '/routes/collection/detail/:itemId',
-      builder: (context, state) {
-        final itemIdValue = state.pathParameters['itemId'];
-        final itemId =
-            itemIdValue != null ? ItemId.fromUniqueString(itemIdValue) : null;
-        return CollectionItemDetailPageProvider(
-          selectedItem: itemId,
-          showAppBar: true,
-        );
-      },
-    ),
-    GoRoute(
-      name: 'addItem',
-      path: '/routes/collection/addItem',
-      builder: (context, state) {
-        return const CollectionAddItemPageProvider(
-          showAppBar: true,
-          title: 'Add Item',
-        );
-      },
-    )
   ],
 );
