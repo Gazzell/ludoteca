@@ -16,8 +16,8 @@ final class CollectionItemAddingState extends CollectionCubitState {
 }
 
 final class CollectionItemAddedState extends CollectionCubitState {
-  final Item item;
-  const CollectionItemAddedState({required this.item});
+  final Item? item;
+  const CollectionItemAddedState({this.item});
 
   @override
   List<Object?> get props => [item];

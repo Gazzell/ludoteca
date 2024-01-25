@@ -5,6 +5,8 @@ import 'package:ludoteca/2_application/pages/collection/collection_add_item/coll
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/collection_item_detail_page.dart';
 import 'package:ludoteca/2_application/pages/pages_shell.dart';
 
+import '../../1_domain/entities/item.dart';
+
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _shellNavigatorKey =
@@ -45,9 +47,13 @@ final routes = GoRouter(
           name: 'addItem',
           path: '/routes/collection/addItem',
           builder: (context, state) {
-            return const CollectionAddItemPageProvider(
+            final Function(Item?) onItemAdded = state.extra != null
+                ? state.extra as Function(Item?)
+                : (item) {};
+            return CollectionAddItemPageProvider(
               showAppBar: true,
               title: 'Add Item',
+              onItemAdded: onItemAdded,
             );
           },
         )

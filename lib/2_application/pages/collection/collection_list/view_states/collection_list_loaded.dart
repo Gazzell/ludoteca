@@ -35,10 +35,12 @@ class CollectionListLoaded extends StatelessWidget {
 
     return BlocListener<CollectionCubit, CollectionCubitState>(
       listener: (context, state) {
-        if (state is CollectionItemAddedState && !items.contains(state.item)) {
+        if (state is CollectionItemAddedState &&
+            state.item != null &&
+            !items.contains(state.item)) {
           context
               .read<CollectionListCubit>()
-              .updateCollection(List<Item>.from(items)..add(state.item));
+              .updateCollection(List<Item>.from(items)..add(state.item!));
         }
       },
       child: Scaffold(

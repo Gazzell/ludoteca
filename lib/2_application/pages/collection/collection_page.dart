@@ -59,24 +59,27 @@ class _CollectionPageState extends State<CollectionPage> {
     }
   }
 
+  onItemAdded(BuildContext context, Item? item) {
+    final collectionCubit = context.read<CollectionCubit>();
+    collectionCubit.itemAdded(item);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CollectionCubit, CollectionCubitState>(
       listener: (context, state) async {
-        final collectionCubit = context.read<CollectionCubit>();
         if (state is CollectionItemAddingState) {
-          late Item? item;
           if (Breakpoints.small.isActive(context)) {
-            item = await context.pushNamed('addItem');
-            if (item != null) {
-              collectionCubit.itemAdded(item);
-            }
+            context.pushNamed(
+              'addItem',
+              extra: (item) => onItemAdded(context, item),
+            );
           }
           return;
         }
         if (state is CollectionItemAddedState &&
             Breakpoints.mediumAndUp.isActive(context)) {
-          onSelectionChanged(context, state.item.id);
+          onSelectionChanged(context, state.item?.id);
         }
       },
       builder: (context, state) {
@@ -100,7 +103,9 @@ class _CollectionPageState extends State<CollectionPage> {
                     return BlocBuilder<CollectionCubit, CollectionCubitState>(
                       builder: (context, state) {
                         if (state is CollectionItemAddingState) {
-                          return const CollectionAddItemPageProvider();
+                          return CollectionAddItemPageProvider(
+                            onItemAdded: (item) => onItemAdded(context, item),
+                          );
                         }
 
                         return CollectionItemDetailPageProvider(

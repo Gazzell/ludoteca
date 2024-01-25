@@ -18,8 +18,13 @@ import 'view_states/collection_add_item_loading.dart';
 class CollectionAddItemPageProvider extends StatelessWidget {
   final bool showAppBar;
   final String? title;
-  const CollectionAddItemPageProvider(
-      {super.key, this.showAppBar = false, this.title});
+  final Function(Item?) onItemAdded;
+  const CollectionAddItemPageProvider({
+    super.key,
+    this.showAppBar = false,
+    this.title,
+    required this.onItemAdded,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +39,11 @@ class CollectionAddItemPageProvider extends StatelessWidget {
           ),
         );
       },
-      child: CollectionAddItemPage(title: title, showAppBar: showAppBar),
+      child: CollectionAddItemPage(
+        title: title,
+        showAppBar: showAppBar,
+        onItemAdded: onItemAdded,
+      ),
     );
   }
 }
@@ -42,8 +51,14 @@ class CollectionAddItemPageProvider extends StatelessWidget {
 class CollectionAddItemPage extends StatelessWidget {
   final bool showAppBar;
   final String? title;
+  final Function(Item?) onItemAdded;
 
-  const CollectionAddItemPage({super.key, this.showAppBar = false, this.title});
+  const CollectionAddItemPage({
+    super.key,
+    this.showAppBar = false,
+    this.title,
+    required this.onItemAdded,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +66,7 @@ class CollectionAddItemPage extends StatelessWidget {
       builder: (context, state) {
         closePage({Item? item}) {
           if (Breakpoints.small.isActive(context)) {
+            onItemAdded(item);
             if (context.canPop()) {
               context.pop(item);
               return;
@@ -74,62 +90,67 @@ class CollectionAddItemPage extends StatelessWidget {
               closePage(item: state.item);
             }
           },
-          child: Scaffold(
-            backgroundColor: Colors.black54,
-            appBar: showAppBar
-                ? AppBar(
-                    title: Text(title ?? ''),
-                    leading: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: closePage,
-                    ),
-                  )
-                : null,
-            body: Builder(
-              builder: (context) {
-                Widget body;
-                if (state is CollectionAddItemLoadingState) {
-                  body = const CollectionAddItemLoading();
-                } else if (state is CollectionAddItemErrorState) {
-                  body = const CollectionAddItemError();
-                } else if (state is CollectionAddItemLoadedState) {
-                  body = CollectionAddItemLoaded(
-                    key: Key(state.item.id.value),
-                    item: state.item,
-                  );
-                } else {
-                  body = const CollectionAddItemEmpty();
-                }
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SearchBar(
-                          leading: const Icon(Icons.search_outlined),
-                          hintText: 'BGG id',
-                          onSubmitted: (value) {
-                            context
-                                .read<CollectionAddItemCubit>()
-                                .readItemDetail(ItemId.fromUniqueString(value));
-                          },
-                        ),
+          child: PopScope(
+            canPop: true,
+            onPopInvoked: (_) => onItemAdded(null),
+            child: Scaffold(
+              backgroundColor: Colors.black54,
+              appBar: showAppBar
+                  ? AppBar(
+                      title: Text(title ?? ''),
+                      leading: IconButton(
+                        icon: const Icon(Icons.arrow_back),
+                        onPressed: closePage,
                       ),
-                      body,
-                    ],
-                  ),
-                );
-              },
-            ),
-            floatingActionButton: FloatingActionButton(
-              child: const Icon(Icons.done_outline_outlined),
-              onPressed: () {
-                if (state is CollectionAddItemLoadedState) {
-                  context
-                      .read<CollectionAddItemCubit>()
-                      .addCollectionItem(state.item);
-                }
-              },
+                    )
+                  : null,
+              body: Builder(
+                builder: (context) {
+                  Widget body;
+                  if (state is CollectionAddItemLoadingState) {
+                    body = const CollectionAddItemLoading();
+                  } else if (state is CollectionAddItemErrorState) {
+                    body = const CollectionAddItemError();
+                  } else if (state is CollectionAddItemLoadedState) {
+                    body = CollectionAddItemLoaded(
+                      key: Key(state.item.id.value),
+                      item: state.item,
+                    );
+                  } else {
+                    body = const CollectionAddItemEmpty();
+                  }
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SearchBar(
+                            leading: const Icon(Icons.search_outlined),
+                            hintText: 'BGG id',
+                            onSubmitted: (value) {
+                              context
+                                  .read<CollectionAddItemCubit>()
+                                  .readItemDetail(
+                                      ItemId.fromUniqueString(value));
+                            },
+                          ),
+                        ),
+                        body,
+                      ],
+                    ),
+                  );
+                },
+              ),
+              floatingActionButton: FloatingActionButton(
+                child: const Icon(Icons.done_outline_outlined),
+                onPressed: () {
+                  if (state is CollectionAddItemLoadedState) {
+                    context
+                        .read<CollectionAddItemCubit>()
+                        .addCollectionItem(state.item);
+                  }
+                },
+              ),
             ),
           ),
         );
