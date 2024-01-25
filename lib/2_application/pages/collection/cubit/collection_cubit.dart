@@ -18,7 +18,7 @@ class CollectionCubit extends Cubit<CollectionCubitState> {
     }
   }
 
-  void itemAdded(Item item) {
+  void itemAdded(Item? item) {
     emit(CollectionItemAddedState(item: item));
   }
 }

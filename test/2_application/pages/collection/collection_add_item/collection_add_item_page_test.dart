@@ -30,6 +30,7 @@ void main() {
       required CollectionAddItemCubit cubit,
       bool showAppBar = false,
       String? title,
+      Function(Item?)? onItemAdded,
     }) {
       return MaterialApp(
         home: MultiBlocProvider(
@@ -44,6 +45,7 @@ void main() {
           child: CollectionAddItemPage(
             showAppBar: showAppBar,
             title: title,
+            onItemAdded: onItemAdded ?? (_) {},
           ),
         ),
       );
