@@ -157,5 +157,44 @@ void main() {
 
       verify(() => mockCollectionListCubit.updateCollection(any())).called(1);
     });
+
+    testWidgets('search bar should filter items by title',
+        (WidgetTester widgetTester) async {
+      final itemList = List<Item>.generate(
+        10,
+        (index) => Item(
+          id: ItemId.fromUniqueString('$index'),
+          title: 'Item ${index + 1}',
+          instances: const [],
+        ),
+        growable: false,
+      );
+
+      await mockNetworkImages(
+        () async => widgetTester.pumpWidget(
+          widgetUnderTest(
+            items: itemList,
+            onItemTapped: (_) {},
+          ),
+        ),
+      );
+
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.enterText(find.byType(SearchBar), '1');
+
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(CollectionListItem), findsNWidgets(2));
+      expect(find.text('Item 1'), findsOneWidget);
+      expect(find.text('Item 10'), findsOneWidget);
+
+      await widgetTester.enterText(find.byType(SearchBar), '10');
+
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(CollectionListItem), findsNWidgets(1));
+      expect(find.text('Item 10'), findsOneWidget);
+    });
   });
 }
