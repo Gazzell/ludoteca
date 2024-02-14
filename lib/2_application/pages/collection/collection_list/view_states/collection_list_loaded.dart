@@ -7,7 +7,7 @@ import '../widgets/collection_list_item.dart';
 import '../../cubit/collection_cubit.dart';
 import '../cubit/collection_list_cubit.dart';
 
-class CollectionListLoaded extends StatelessWidget {
+class CollectionListLoaded extends StatefulWidget {
   final List<Item> items;
   final Function(ItemId)? onItemTapped;
   final ItemId? selectedItem;
@@ -20,11 +20,24 @@ class CollectionListLoaded extends StatelessWidget {
   });
 
   @override
+  State<CollectionListLoaded> createState() => _CollectionListLoadedState();
+}
+
+class _CollectionListLoadedState extends State<CollectionListLoaded> {
+  List<Item> filteredItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredItems = widget.items;
+  }
+
+  @override
   Widget build(BuildContext context) {
     onItemTap(int index) async {
-      if (onItemTapped != null) {
-        final itemId = items[index].id;
-        onItemTapped!(itemId);
+      if (widget.onItemTapped != null) {
+        final itemId = filteredItems[index].id;
+        widget.onItemTapped!(itemId);
       }
     }
 
@@ -33,27 +46,46 @@ class CollectionListLoaded extends StatelessWidget {
       collectionCubit.setAddingItem();
     }
 
+    onSearchBarChanged(value) {
+      setState(() {
+        filteredItems = widget.items
+            .where((item) =>
+                item.title.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+      });
+    }
+
     return BlocListener<CollectionCubit, CollectionCubitState>(
       listener: (context, state) {
         if (state is CollectionItemAddedState &&
             state.item != null &&
-            !items.contains(state.item)) {
-          context
-              .read<CollectionListCubit>()
-              .updateCollection(List<Item>.from(items)..add(state.item!));
+            !widget.items.contains(state.item)) {
+          context.read<CollectionListCubit>().updateCollection(
+              List<Item>.from(widget.items)..add(state.item!));
         }
       },
       child: Scaffold(
         body: Center(
-          child: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return CollectionListItem(
-                item: items[index],
-                selected: selectedItem == items[index].id,
-                onTap: () => onItemTap(index),
-              );
-            },
+          child: Column(
+            children: [
+              SearchBar(
+                leading: const Icon(Icons.search_outlined),
+                onChanged: onSearchBarChanged,
+                hintText: 'Title...',
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredItems.length,
+                  itemBuilder: (context, index) {
+                    return CollectionListItem(
+                      item: filteredItems[index],
+                      selected: widget.selectedItem == filteredItems[index].id,
+                      onTap: () => onItemTap(index),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
