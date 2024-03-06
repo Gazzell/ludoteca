@@ -25,11 +25,30 @@ class CollectionListLoaded extends StatefulWidget {
 
 class _CollectionListLoadedState extends State<CollectionListLoaded> {
   List<Item> filteredItems = [];
+  String searchText = '';
 
   @override
   void initState() {
     super.initState();
     filteredItems = widget.items;
+  }
+
+  @override
+  void didUpdateWidget(covariant CollectionListLoaded oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _onSearchBarChanged(searchText);
+  }
+
+  void _onSearchBarChanged(value) {
+    setState(() {
+      if (searchText != value) {
+        searchText = value;
+      }
+      filteredItems = widget.items
+          .where(
+              (item) => item.title.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -44,15 +63,6 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
     onAddItemTap() {
       final collectionCubit = context.read<CollectionCubit>();
       collectionCubit.setAddingItem();
-    }
-
-    onSearchBarChanged(value) {
-      setState(() {
-        filteredItems = widget.items
-            .where((item) =>
-                item.title.toLowerCase().contains(value.toLowerCase()))
-            .toList();
-      });
     }
 
     return BlocListener<CollectionCubit, CollectionCubitState>(
@@ -70,7 +80,7 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
             children: [
               SearchBar(
                 leading: const Icon(Icons.search_outlined),
-                onChanged: onSearchBarChanged,
+                onChanged: _onSearchBarChanged,
                 hintText: 'Title...',
               ),
               Expanded(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.dart';
 import '../../../../1_domain/entities/unique_id.dart';
 import '../../../../1_domain/entities/item.dart';
 import '../../../../1_domain/repositories/collection_repository.dart';
@@ -65,8 +64,8 @@ class CollectionAddItemPage extends StatelessWidget {
     return BlocBuilder<CollectionAddItemCubit, CollectionAddItemCubitState>(
       builder: (context, state) {
         closePage({Item? item}) {
+          onItemAdded(item);
           if (Breakpoints.small.isActive(context)) {
-            onItemAdded(item);
             if (context.canPop()) {
               context.pop(item);
               return;
@@ -75,11 +74,6 @@ class CollectionAddItemPage extends StatelessWidget {
               'shell',
               pathParameters: {'tab': CollectionPage.pageConfig.name},
             );
-            return;
-          }
-
-          if (item != null) {
-            context.read<CollectionCubit>().itemAdded(item);
           }
         }
 
