@@ -4,6 +4,7 @@ import 'package:ludoteca/0_data/data_sources/bgg_data_source.dart';
 import 'package:ludoteca/0_data/repositories/collection_repository_mock.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
 import 'package:ludoteca/2_application/core/routes.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -31,6 +32,14 @@ class App extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 239, 43, 187),
           ),
         ),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('es'),
+        ],
       ),
     );
   }
