@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ludoteca/2_application/core/page_config.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_page.dart';
 import 'package:ludoteca/2_application/pages/home/home_page.dart';
+import 'package:ludoteca/i18n/strings.g.dart';
 
 class PagesShell extends StatefulWidget {
   final int currentPageIndex;
@@ -20,13 +21,6 @@ class PagesShell extends StatefulWidget {
 }
 
 class _PagesShellState extends State<PagesShell> {
-  final destinations = PagesShell.tabs.map(
-    (page) => NavigationDestination(
-      icon: Icon(page.icon, key: Key('icon-${page.name}')),
-      label: page.name,
-    ),
-  );
-
   void _onTapNavigationDestination(BuildContext context, int index) {
     context.goNamed(
       'shell',
@@ -36,6 +30,15 @@ class _PagesShellState extends State<PagesShell> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    
+    final destinations = PagesShell.tabs.map(
+      (page) => NavigationDestination(
+        icon: Icon(page.icon, key: Key('icon-${page.name}')),
+        label: t[page.name],
+      ),
+    );
+    
     return Scaffold(
       body: SafeArea(
         child: AdaptiveLayout(

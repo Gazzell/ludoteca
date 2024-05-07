@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ludoteca/0_data/data_sources/bgg_data_source.dart';
 import 'package:ludoteca/0_data/repositories/collection_repository_mock.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
 import 'package:ludoteca/2_application/core/routes.dart';
+import 'package:ludoteca/i18n/strings.g.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
+
+  beforeFirstBuild(BuildContext context) {
+    LocaleSettings.setLocale(AppLocale.en);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +37,9 @@ class App extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 239, 43, 187),
           ),
         ),
+        locale: TranslationProvider.of(context).flutterLocale,
+        supportedLocales: AppLocaleUtils.supportedLocales,
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
       ),
     );
   }
