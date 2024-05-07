@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/2_application/pages/pages_shell.dart';
 
+import '../../helpers.dart';
+
 void main() {
   Widget widgetUnderTest() {
-    return MaterialApp(
-      home: Material(
-        child: PagesShell(tab: 'home'),
+    return withTranslationProvider(
+      MaterialApp(
+        home: Material(
+          child: PagesShell(tab: 'home'),
+        ),
       ),
     );
   }
