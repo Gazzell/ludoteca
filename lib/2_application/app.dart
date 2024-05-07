@@ -10,10 +10,6 @@ import 'package:ludoteca/i18n/strings.g.dart';
 class App extends StatelessWidget {
   const App({super.key});
 
-  beforeFirstBuild(BuildContext context) {
-    LocaleSettings.setLocale(AppLocale.en);
-  }
-
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider<CollectionRepository>(

@@ -11,13 +11,15 @@ import 'package:ludoteca/2_application/pages/collection/collection_list/view_sta
 import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
+import '../../../../helpers.dart';
+
 class MockCollectionListCubit extends MockCubit<CollectionListCubitState>
     implements CollectionListCubit {}
 
 void main() {
   Widget widgetUnderTest({required CollectionListCubit cubit}) {
-    return MaterialApp(
-      home: Material(
+    return withMaterialAppTranslation(
+      Material(
         child: MultiBlocProvider(
           providers: [
             BlocProvider<CollectionListCubit>(

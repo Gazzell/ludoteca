@@ -14,6 +14,7 @@ import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.d
 import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
+import '../../../helpers.dart';
 import '../../../mocks/go_route_mock.dart';
 
 class MockCollectionCubit extends MockCubit<CollectionCubitState>
@@ -21,8 +22,8 @@ class MockCollectionCubit extends MockCubit<CollectionCubitState>
 
 void main() {
   Widget widgetUnderTest({MockGoRouter? router}) {
-    return MaterialApp(
-      home: Material(
+    return withMaterialAppTranslation(
+      Material(
         child: MockGoRouterProvider(
           goRouter: router ?? MockGoRouter(),
           child: RepositoryProvider<CollectionRepository>(

@@ -13,6 +13,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 import '../../../../../1_domain/use_cases/add_collection_item_test.dart';
+import '../../../../../helpers.dart';
 
 abstract class CallbackFunction {
   void call(ItemId id);
@@ -34,8 +35,8 @@ void main() {
     MockCollectionCubit? mockCollectionCubit,
     MockCollectionListCubit? mockCollectionListCubit,
   }) {
-    return MaterialApp(
-      home: MultiBlocProvider(
+    return withMaterialAppTranslation(
+      MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => mockCollectionCubit ?? CollectionCubit(),

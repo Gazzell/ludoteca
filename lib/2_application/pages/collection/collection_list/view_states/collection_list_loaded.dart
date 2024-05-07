@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ludoteca/i18n/strings.g.dart';
 
 import '../../../../../1_domain/entities/item.dart';
 import '../../../../../1_domain/entities/unique_id.dart';
@@ -53,6 +54,8 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
     onItemTap(int index) async {
       if (widget.onItemTapped != null) {
         final itemId = filteredItems[index].id;
@@ -81,7 +84,7 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
               SearchBar(
                 leading: const Icon(Icons.search_outlined),
                 onChanged: _onSearchBarChanged,
-                hintText: 'Title...',
+                hintText: t.collectionSearch,
               ),
               Expanded(
                 child: ListView.builder(
