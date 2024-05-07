@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ludoteca/i18n/strings.g.dart';
 import '../../../../1_domain/entities/unique_id.dart';
 import '../../../../1_domain/entities/item.dart';
 import '../../../../1_domain/repositories/collection_repository.dart';
@@ -61,6 +62,8 @@ class CollectionAddItemPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
     return BlocBuilder<CollectionAddItemCubit, CollectionAddItemCubitState>(
       builder: (context, state) {
         closePage({Item? item}) {
@@ -120,7 +123,7 @@ class CollectionAddItemPage extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: SearchBar(
                             leading: const Icon(Icons.search_outlined),
-                            hintText: 'BGG id',
+                            hintText: t.collectionAddItemSearchBgg,
                             onSubmitted: (value) {
                               context
                                   .read<CollectionAddItemCubit>()

@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 4 (2 per locale)
+/// Strings: 12 (6 per locale)
 ///
-/// Built on 2024-05-07 at 12:54 UTC
+/// Built on 2024-05-07 at 15:33 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -150,6 +150,10 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	// Translations
 	String get home => 'Home';
 	String get collection => 'Collection';
+	String get collectionSearch => 'Title...';
+	String get collectionAddItemTitle => 'Add Item';
+	String get collectionAddItemSearchBgg => 'Bgg Id...';
+	String get collectionNoItemSelected => 'No item selected';
 }
 
 // Path: <root>
@@ -178,6 +182,10 @@ class _StringsEs implements Translations {
 	// Translations
 	@override String get home => 'Inicio';
 	@override String get collection => 'Colección';
+	@override String get collectionSearch => 'Título...';
+	@override String get collectionAddItemTitle => 'Nuevo elemento';
+	@override String get collectionAddItemSearchBgg => 'Id Bgg...';
+	@override String get collectionNoItemSelected => 'Ningún elemento seleccionado';
 }
 
 /// Flat map(s) containing all translations.
@@ -188,6 +196,10 @@ extension on Translations {
 		switch (path) {
 			case 'home': return 'Home';
 			case 'collection': return 'Collection';
+			case 'collectionSearch': return 'Title...';
+			case 'collectionAddItemTitle': return 'Add Item';
+			case 'collectionAddItemSearchBgg': return 'Bgg Id...';
+			case 'collectionNoItemSelected': return 'No item selected';
 			default: return null;
 		}
 	}
@@ -198,6 +210,10 @@ extension on _StringsEs {
 		switch (path) {
 			case 'home': return 'Inicio';
 			case 'collection': return 'Colección';
+			case 'collectionSearch': return 'Título...';
+			case 'collectionAddItemTitle': return 'Nuevo elemento';
+			case 'collectionAddItemSearchBgg': return 'Id Bgg...';
+			case 'collectionNoItemSelected': return 'Ningún elemento seleccionado';
 			default: return null;
 		}
 	}

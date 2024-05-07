@@ -13,6 +13,8 @@ import 'package:ludoteca/2_application/pages/collection/cubit/collection_cubit.d
 import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
+import '../../../../helpers.dart';
+
 class MockCollectionAddItemCubit extends MockCubit<CollectionAddItemCubitState>
     implements CollectionAddItemCubit {}
 
@@ -32,20 +34,22 @@ void main() {
       String? title,
       Function(Item?)? onItemAdded,
     }) {
-      return MaterialApp(
-        home: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => cubit,
+      return withMaterialAppTranslation(
+        MaterialApp(
+          home: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => cubit,
+              ),
+              BlocProvider<CollectionCubit>(
+                create: (context) => MockCollectionCubit(),
+              ),
+            ],
+            child: CollectionAddItemPage(
+              showAppBar: showAppBar,
+              title: title,
+              onItemAdded: onItemAdded ?? (_) {},
             ),
-            BlocProvider<CollectionCubit>(
-              create: (context) => MockCollectionCubit(),
-            ),
-          ],
-          child: CollectionAddItemPage(
-            showAppBar: showAppBar,
-            title: title,
-            onItemAdded: onItemAdded ?? (_) {},
           ),
         ),
       );

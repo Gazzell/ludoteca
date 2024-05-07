@@ -1,4 +1,8 @@
 {
   "home": "Home",
-  "collection": "Collection"
+  "collection": "Collection",
+  "collectionSearch": "Title...",
+  "collectionAddItemTitle": "Add Item",
+  "collectionAddItemSearchBgg": "Bgg Id...",
+  "collectionNoItemSelected": "No item selected"
 }

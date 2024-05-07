@@ -10,7 +10,7 @@ import '../helpers.dart';
 
 void main() {
   testWidgets('should render PagesShell', (WidgetTester tester) async {
-    await tester.pumpWidget(withTranslationProvider(const App()));
+    await tester.pumpWidget(withMaterialAppTranslation(const App()));
 
     expect(find.byType(PagesShell), findsOneWidget);
   });
@@ -18,14 +18,14 @@ void main() {
   group('navigation', () {
     testWidgets('should route to HomePage by default',
         (WidgetTester tester) async {
-      await tester.pumpWidget(withTranslationProvider(const App()));
+      await tester.pumpWidget(withMaterialAppTranslation(const App()));
 
       expect(find.byType(HomePage), findsOneWidget);
     });
 
     testWidgets('on collection click goes to collection page',
         (WidgetTester tester) async {
-      await tester.pumpWidget(withTranslationProvider(const App()));
+      await tester.pumpWidget(withMaterialAppTranslation(const App()));
       await tester.pumpAndSettle(const Duration(seconds: 10));
 
       expect(find.byType(CollectionPage), findsNothing);
@@ -42,7 +42,7 @@ void main() {
     });
 
     testWidgets('can return to home page', (WidgetTester tester) async {
-      await tester.pumpWidget(withTranslationProvider(const App()));
+      await tester.pumpWidget(withMaterialAppTranslation(const App()));
       await tester.pumpAndSettle();
 
       final collectionNavigationIcon = find.byIcon(Icons.menu_book_outlined);

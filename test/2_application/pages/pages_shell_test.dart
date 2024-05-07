@@ -6,7 +6,7 @@ import '../../helpers.dart';
 
 void main() {
   Widget widgetUnderTest() {
-    return withTranslationProvider(
+    return withMaterialAppTranslation(
       MaterialApp(
         home: Material(
           child: PagesShell(tab: 'home'),

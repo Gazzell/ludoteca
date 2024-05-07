@@ -11,6 +11,8 @@ import 'package:ludoteca/2_application/pages/collection/collection_item_detail/v
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_loading.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
+import '../../../../helpers.dart';
+
 class MockCollectionItemDetailCubit
     extends MockCubit<CollectionItemDetailCubitState>
     implements CollectionItemDetailCubit {}
@@ -20,8 +22,8 @@ void main() {
     Widget widgetUnderTest({
       required CollectionItemDetailCubit cubit,
     }) {
-      return MaterialApp(
-        home: Material(
+      return withMaterialAppTranslation(
+        Material(
           child: BlocProvider<CollectionItemDetailCubit>(
             create: (context) => cubit,
             child: const CollectionItemDetailPage(),

@@ -4,6 +4,7 @@ import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/collection_add_item_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/collection_item_detail_page.dart';
 import 'package:ludoteca/2_application/pages/pages_shell.dart';
+import 'package:ludoteca/i18n/strings.g.dart';
 
 import '../../1_domain/entities/item.dart';
 
@@ -47,12 +48,13 @@ final routes = GoRouter(
           name: 'addItem',
           path: '/routes/collection/addItem',
           builder: (context, state) {
+            final t = Translations.of(context);
             final Function(Item?) onItemAdded = state.extra != null
                 ? state.extra as Function(Item?)
                 : (item) {};
             return CollectionAddItemPageProvider(
               showAppBar: true,
-              title: 'Add Item',
+              title: t.collectionAddItemTitle,
               onItemAdded: onItemAdded,
             );
           },

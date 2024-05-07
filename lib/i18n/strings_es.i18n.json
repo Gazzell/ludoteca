@@ -1,4 +1,8 @@
 {
   "home": "Inicio",
-  "collection": "Colección"
+  "collection": "Colección",
+  "collectionSearch": "Título...",
+  "collectionAddItemTitle": "Nuevo elemento",
+  "collectionAddItemSearchBgg": "Id Bgg...",
+  "collectionNoItemSelected": "Ningún elemento seleccionado"
 }
