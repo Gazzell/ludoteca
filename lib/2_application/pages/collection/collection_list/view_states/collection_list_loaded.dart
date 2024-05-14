@@ -28,10 +28,15 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
   List<Item> filteredItems = [];
   String searchText = '';
 
+  _sortItems() {
+    filteredItems.sort((a, b) => a.title.compareTo(b.title));
+  }
+
   @override
   void initState() {
     super.initState();
     filteredItems = widget.items;
+    _sortItems();
   }
 
   @override
@@ -49,6 +54,7 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
           .where(
               (item) => item.title.toLowerCase().contains(value.toLowerCase()))
           .toList();
+      _sortItems();
     });
   }
 
