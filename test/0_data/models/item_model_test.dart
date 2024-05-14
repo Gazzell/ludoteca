@@ -28,9 +28,9 @@ void main() {
       );
 
       const expectedItem = ItemModel(
-        id: '1',
+        bggId: '1',
         title: 'name',
-        description: 'description',
+        description: 'description\n\n',
         imageUrl: 'image.jpg',
         minAge: 14,
         minPlayers: 3,
