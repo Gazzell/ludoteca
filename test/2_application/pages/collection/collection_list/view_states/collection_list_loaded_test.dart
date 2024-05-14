@@ -197,5 +197,55 @@ void main() {
       expect(find.byType(CollectionListItem), findsNWidgets(1));
       expect(find.text('Item 10'), findsOneWidget);
     });
+
+    testWidgets('searchbar filtered results should be shorted by title',
+        (WidgetTester tester) async {
+      // Arrange
+      final items = [
+        Item(
+          id: ItemId.fromUniqueString('1'),
+          title: 'Title with text',
+          instances: const [],
+        ),
+        Item(
+          id: ItemId.fromUniqueString('2'),
+          title: 'Item 2',
+          instances: const [],
+        ),
+        Item(
+          id: ItemId.fromUniqueString('3'),
+          title: 'A different title with text',
+          instances: const [],
+        ),
+      ];
+
+      await mockNetworkImages(
+        () async => tester.pumpWidget(
+          widgetUnderTest(
+            items: items,
+            onItemTapped: (_) {},
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(SearchBar), 'text');
+
+      await tester.pumpAndSettle();
+
+      final sortedItems = tester
+          .widgetList<CollectionListItem>(find.byType(CollectionListItem));
+          
+      expect(sortedItems.length, 2);
+      expect(
+        sortedItems.elementAt(0).item.title,
+        'A different title with text',
+      );
+      expect(
+        sortedItems.elementAt(1).item.title,
+        'Title with text',
+      );
+    });
   });
 }
