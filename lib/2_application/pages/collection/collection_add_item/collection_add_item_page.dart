@@ -89,7 +89,7 @@ class CollectionAddItemPage extends StatelessWidget {
           },
           child: PopScope(
             canPop: true,
-            onPopInvoked: (_) => onItemAdded(null),
+            onPopInvokedWithResult: (_, result) => onItemAdded(null),
             child: Scaffold(
               backgroundColor: Colors.black54,
               appBar: showAppBar
