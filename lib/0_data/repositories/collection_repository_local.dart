@@ -32,6 +32,8 @@ class CollectionRepositoryLocal implements CollectionRepository {
       }
       final items = await localDataSource.readItems(ids);
       return Right(itemModelListToItemList(items));
+    } on ItemNotFoundException catch (e) {
+      return Left(ItemNotFoundFailure(itemId: e.itemId));
     } on CacheException catch (e) {
       return Left(CacheFailure(stackTrace: e.toString()));
     } on Exception catch (e) {
@@ -44,6 +46,8 @@ class CollectionRepositoryLocal implements CollectionRepository {
     try {
       final itemModel = await localDataSource.readItem(itemId: itemId.value);
       return Right(Item.fromItemModel(itemModel));
+    } on ItemNotFoundException catch (e) {
+      return Left(ItemNotFoundFailure(itemId: e.itemId));
     } on CacheException catch (e) {
       return Left(CacheFailure(stackTrace: e.toString()));
     } on Exception catch (e) {

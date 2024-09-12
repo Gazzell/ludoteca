@@ -5,6 +5,15 @@ class FailedRequestException implements Exception {
   FailedRequestException(this.message);
 }
 
+class ItemNotFoundException implements Exception {
+  final String itemId;
+  ItemNotFoundException(this.itemId);
+
+  String get message {
+    return 'Item $itemId not found';
+  }
+}
+
 class ItemParseFailedException implements Exception {
   final String data;
   final String itemId;
