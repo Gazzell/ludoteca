@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:ludoteca/0_data/models/item_model.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 
 enum ItemStatus {
@@ -32,7 +33,7 @@ class Item extends Equatable {
     this.imageUrl,
     this.thumbnailUrl,
     this.description,
-    this.minAge = 0,
+    this.minAge,
     this.minPlayers,
     this.maxPlayers,
     this.playingTime,
@@ -48,6 +49,27 @@ class Item extends Equatable {
       id: ItemId(),
       title: '',
       instances: const [],
+    );
+  }
+
+  factory Item.fromItemModel(ItemModel itemModel) {
+    return Item(
+      id: ItemId.fromUniqueString(itemModel.id),
+      title: itemModel.title,
+      instances: itemModel.instances,
+      bggId: itemModel.bggId,
+      imageUrl: itemModel.imageUrl,
+      thumbnailUrl: itemModel.thumbnailUrl,
+      description: itemModel.description,
+      minAge: itemModel.minAge,
+      minPlayers: itemModel.minPlayers,
+      maxPlayers: itemModel.maxPlayers,
+      playingTime: itemModel.playingTime,
+      author: itemModel.author,
+      publisher: itemModel.publisher,
+      publishYear: itemModel.publishYear,
+      complexity: itemModel.complexity,
+      rating: itemModel.rating,
     );
   }
 
