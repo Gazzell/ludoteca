@@ -10,6 +10,14 @@ class ServerFailure extends Failure with EquatableMixin {
   List<Object?> get props => [stackTrace];
 }
 
+class CacheFailure extends Failure with EquatableMixin {
+  final String? stackTrace;
+  CacheFailure({this.stackTrace});
+  
+  @override
+  List<Object?> get props => [stackTrace];
+}
+
 class ItemNotFoundFailure extends Failure with EquatableMixin {
   final String itemId;
   ItemNotFoundFailure({required this.itemId});
