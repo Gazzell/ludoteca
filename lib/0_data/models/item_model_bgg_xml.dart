@@ -28,6 +28,7 @@ ItemModel _fromBggXml(XmlDocument document) {
     );
 
     return ItemModel(
+      id: bggId,
       bggId: bggId,
       title: title,
       imageUrl: imageUrl,
