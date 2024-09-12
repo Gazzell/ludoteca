@@ -1,10 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:xml/xml.dart';
 
 part 'item_model_bgg_xml.dart';
+part 'item_model.g.dart';
 
+@JsonSerializable()
 class ItemModel extends Equatable {
   final String id;
   final String? bggId;
@@ -44,6 +47,9 @@ class ItemModel extends Equatable {
 
   factory ItemModel.fromBggXml(XmlDocument document) => _fromBggXml(document);
 
+  factory ItemModel.fromJson(Map<String, dynamic> json) =>
+      _$ItemModelFromJson(json);
+
   factory ItemModel.fromItem(Item item) => ItemModel(
         id: item.id.value,
         bggId: item.bggId,
@@ -62,6 +68,8 @@ class ItemModel extends Equatable {
         rating: item.rating,
         instances: item.instances,
       );
+
+  Map<String, dynamic> toJson() => _$ItemModelToJson(this);
 
   @override
   List<Object?> get props => [
