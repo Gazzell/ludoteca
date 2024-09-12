@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:xml/xml.dart';
 
 part 'item_model_bgg_xml.dart';
 
 class ItemModel extends Equatable {
-  final String? id;
+  final String id;
   final String? bggId;
   final String title;
   final String? imageUrl;
@@ -23,7 +24,7 @@ class ItemModel extends Equatable {
   final List<String> instances;
 
   const ItemModel({
-    this.id,
+    required this.id,
     this.bggId,
     required this.title,
     this.imageUrl,
@@ -42,6 +43,25 @@ class ItemModel extends Equatable {
   });
 
   factory ItemModel.fromBggXml(XmlDocument document) => _fromBggXml(document);
+
+  factory ItemModel.fromItem(Item item) => ItemModel(
+        id: item.id.value,
+        bggId: item.bggId,
+        title: item.title,
+        imageUrl: item.imageUrl,
+        thumbnailUrl: item.thumbnailUrl,
+        description: item.description,
+        minAge: item.minAge,
+        minPlayers: item.minPlayers,
+        maxPlayers: item.maxPlayers,
+        playingTime: item.playingTime,
+        author: item.author,
+        publisher: item.publisher,
+        publishYear: item.publishYear,
+        complexity: item.complexity,
+        rating: item.rating,
+        instances: item.instances,
+      );
 
   @override
   List<Object?> get props => [
