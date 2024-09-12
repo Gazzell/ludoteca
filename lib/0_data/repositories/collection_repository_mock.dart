@@ -75,7 +75,7 @@ class CollectionRepositoryMock implements CollectionRepository {
 
   Item modelToItem({required ItemModel itemModel}) {
     return Item(
-      id: itemModel.id != null ? ItemId.fromUniqueString(itemModel.id!) : ItemId(),
+      id: ItemId.fromUniqueString(itemModel.id),
       bggId: itemModel.bggId,
       title: itemModel.title,
       instances: const [],
