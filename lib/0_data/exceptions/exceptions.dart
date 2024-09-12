@@ -1,3 +1,5 @@
+class CacheException implements Exception {}
+
 class FailedRequestException implements Exception {
   final String message;
   FailedRequestException(this.message);
