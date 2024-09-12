@@ -110,6 +110,24 @@ void main() {
     });
 
     test(
+        'should return an ItemNotFoundFailure when localDataSource throws an ItemNotFoundException',
+        () async {
+      when(() => mockLocalDataSource.readItemIds())
+          .thenAnswer((_) async => ['id1', 'id2', 'id3']);
+
+      when(() => mockLocalDataSource.readItems(['id1', 'id2', 'id3']))
+          .thenThrow(ItemNotFoundException('id1'));
+
+      final result = await repository.readItems();
+
+      expect(result.isLeft, true);
+      expect(
+        result.left,
+        isA<ItemNotFoundFailure>(),
+      );
+    });
+
+    test(
         'should return a CacheFailure when localDataSource throws a CacheException',
         () async {
       when(() => mockLocalDataSource.readItemIds())
@@ -166,6 +184,17 @@ void main() {
           ),
         ),
       );
+    });
+
+    test(
+        'should return an ItemNotFoundFailure when localDataSource throws an ItemNotFoundException',
+        () async {
+      when(() => mockLocalDataSource.readItem(itemId: 'id1'))
+          .thenThrow(ItemNotFoundException('id1'));
+
+      final result = await repository.readItem(ItemId.fromUniqueString('id1'));
+
+      expect(result, equals(Left(ItemNotFoundFailure(itemId: 'id1'))));
     });
 
     test(
