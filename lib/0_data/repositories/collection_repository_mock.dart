@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:either_dart/either.dart';
-import 'package:ludoteca/0_data/data_sources/bgg_data_source.dart';
 import 'package:ludoteca/0_data/models/item_model.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
@@ -9,7 +8,6 @@ import 'package:ludoteca/1_domain/failures/failures.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
 
 class CollectionRepositoryMock implements CollectionRepository {
-  final BggDataSource bggDataSource;
   final List<ItemId> _itemIds = List<ItemId>.generate(
     20,
     (index) => ItemId.fromUniqueString('item-$index'),
@@ -21,7 +19,7 @@ class CollectionRepositoryMock implements CollectionRepository {
 
   final times = [5, 15, 30, 45, 60, 120, 180];
 
-  CollectionRepositoryMock({required this.bggDataSource}) {
+  CollectionRepositoryMock() {
     _itemCollection = Map.fromEntries(
       _itemIds.map(
         (item) {
@@ -63,16 +61,9 @@ class CollectionRepositoryMock implements CollectionRepository {
   Future<Either<Failure, Item>> readItem(ItemId itemId) async {
     Item? item = _itemCollection[itemId.value];
     if (item == null) {
-      try {
-        final itemModel = await bggDataSource.getItem(id: itemId.value);
-        Item item = modelToItem(itemModel: itemModel);
-        return Future.value(Right(item));
-      } on Exception catch (e) {
-        return Future.value(Left(ServerFailure(stackTrace: e.toString())));
-      }
-    } else {
-      return Future.value(Right(item));
+      return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
+    return Future.value(Right(item));
   }
 
   @override

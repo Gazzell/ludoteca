@@ -196,10 +196,7 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pump();
 
-      verify(
-        () => mockCollectionAddItemCubit
-            .readItemDetail(ItemId.fromUniqueString('111')),
-      ).called(1);
+      verify(() => mockCollectionAddItemCubit.readItemDetail('111')).called(1);
 
       final addButton = find.byIcon(Icons.done_outline_outlined);
       expect(addButton, findsOneWidget);

@@ -4,19 +4,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/failures/failures.dart';
-import 'package:ludoteca/1_domain/use_cases/get_item.dart';
+import 'package:ludoteca/1_domain/use_cases/get_bgg_item.dart';
 import 'package:ludoteca/1_domain/use_cases/add_collection_item.dart';
 import 'package:ludoteca/1_domain/use_cases/use_case.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/cubit/collection_add_item_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGetItemDetailUseCase extends Mock implements GetItem {}
+class MockGetBggItemDetailUseCase extends Mock implements GetBggItem {}
 
 class MockAddCollectionItemUseCase extends Mock implements AddCollectionItem {}
 
 void main() {
   group('CollectionAddItemCubit', () {
-    final mockGetItemDetailUseCase = MockGetItemDetailUseCase();
+    final mockGetBggItemDetailUseCase = MockGetBggItemDetailUseCase();
     final mockAddCollectionItemUseCase = MockAddCollectionItemUseCase();
 
     final fakeItem = Item(
@@ -41,7 +41,7 @@ void main() {
       blocTest(
         'nothing when no method is called',
         build: () => CollectionAddItemCubit(
-          getItem: mockGetItemDetailUseCase,
+          getBggItem: mockGetBggItemDetailUseCase,
           addItem: mockAddCollectionItemUseCase,
         ),
         expect: () => const <CollectionAddItemCubitState>[],
@@ -50,17 +50,17 @@ void main() {
       blocTest(
         'CollectionAddItemErrorState when readItemIds fails',
         setUp: () => when(
-          () => mockGetItemDetailUseCase.call(
-            ItemParams(
-              itemId: ItemId.fromUniqueString('itemId'),
+          () => mockGetBggItemDetailUseCase.call(
+            GetBggItemParams(
+              itemId: 'itemId',
             ),
           ),
         ).thenAnswer((invocation) => Future.value(Left(ServerFailure()))),
         build: () => CollectionAddItemCubit(
-          getItem: mockGetItemDetailUseCase,
+          getBggItem: mockGetBggItemDetailUseCase,
           addItem: mockAddCollectionItemUseCase,
         ),
-        act: (cubit) => cubit.readItemDetail(ItemId.fromUniqueString('itemId')),
+        act: (cubit) => cubit.readItemDetail('itemId'),
         expect: () => const <CollectionAddItemCubitState>[
           CollectionAddItemLoadingState(),
           CollectionAddItemErrorState(),
@@ -70,17 +70,14 @@ void main() {
       blocTest(
         'CollectionAddItemLoadedState when readItemDetail succeds',
         setUp: () => when(
-          () => mockGetItemDetailUseCase.call(
-            ItemParams(
-              itemId: ItemId.fromUniqueString('itemId'),
-            ),
-          ),
+          () => mockGetBggItemDetailUseCase
+              .call(GetBggItemParams(itemId: 'itemId'))
         ).thenAnswer((invocation) => Future.value(Right(fakeItem))),
         build: () => CollectionAddItemCubit(
-          getItem: mockGetItemDetailUseCase,
+          getBggItem: mockGetBggItemDetailUseCase,
           addItem: mockAddCollectionItemUseCase,
         ),
-        act: (cubit) => cubit.readItemDetail(ItemId.fromUniqueString('itemId')),
+        act: (cubit) => cubit.readItemDetail('itemId'),
         expect: () => <CollectionAddItemCubitState>[
           const CollectionAddItemLoadingState(),
           CollectionAddItemLoadedState(item: fakeItem),
@@ -95,7 +92,7 @@ void main() {
           ),
         ).thenAnswer((invocation) => Future.value(Left(ServerFailure()))),
         build: () => CollectionAddItemCubit(
-          getItem: mockGetItemDetailUseCase,
+          getBggItem: mockGetBggItemDetailUseCase,
           addItem: mockAddCollectionItemUseCase,
         ),
         act: (cubit) => cubit.addCollectionItem(fakeItem),
@@ -115,7 +112,7 @@ void main() {
           ),
         ).thenAnswer((invocation) => Future.value(Right(fakeItem))),
         build: () => CollectionAddItemCubit(
-          getItem: mockGetItemDetailUseCase,
+          getBggItem: mockGetBggItemDetailUseCase,
           addItem: mockAddCollectionItemUseCase,
         ),
         act: (cubit) => cubit.addCollectionItem(fakeItem),

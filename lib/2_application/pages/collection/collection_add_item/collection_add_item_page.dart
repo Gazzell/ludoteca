@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ludoteca/0_data/repositories/bgg_repository.dart';
+import 'package:ludoteca/1_domain/use_cases/get_bgg_item.dart';
 import 'package:ludoteca/i18n/strings.g.dart';
-import '../../../../1_domain/entities/unique_id.dart';
 import '../../../../1_domain/entities/item.dart';
 import '../../../../1_domain/repositories/collection_repository.dart';
 import '../../../../1_domain/use_cases/add_collection_item.dart';
-import '../../../../1_domain/use_cases/get_item.dart';
 import '../collection_page.dart';
 import 'cubit/collection_add_item_cubit.dart';
 import 'view_states/collection_add_item_empty.dart';
@@ -32,8 +32,9 @@ class CollectionAddItemPageProvider extends StatelessWidget {
       create: (context) {
         final collectionRepository =
             RepositoryProvider.of<CollectionRepository>(context);
+        final bggRepository = RepositoryProvider.of<BggRepository>(context);
         return CollectionAddItemCubit(
-          getItem: GetItem(collectionRepository: collectionRepository),
+          getBggItem: GetBggItem(bggRepository: bggRepository),
           addItem: AddCollectionItem(
             collectionRepository: collectionRepository,
           ),
@@ -127,8 +128,7 @@ class CollectionAddItemPage extends StatelessWidget {
                             onSubmitted: (value) {
                               context
                                   .read<CollectionAddItemCubit>()
-                                  .readItemDetail(
-                                      ItemId.fromUniqueString(value));
+                                  .readItemDetail(value);
                             },
                           ),
                         ),

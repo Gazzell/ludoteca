@@ -29,7 +29,7 @@ void main() {
     rating: 6.5,
   );
 
-  group('GetItemDetail use case', () {
+  group('GetItem use case', () {
     group('should return Right', () {
       test('with an ItemDetail', () async {
         final mockCollectionRepository = CollectionRepositoryMock();
