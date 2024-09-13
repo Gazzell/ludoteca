@@ -33,3 +33,12 @@ class AddItemParams extends Params {
   @override
   List<Object?> get props => [item];
 }
+
+class GetBggItemParams extends Params {
+  final String itemId;
+
+  GetBggItemParams({required this.itemId});
+
+  @override
+  List<Object?> get props => [itemId];
+}
