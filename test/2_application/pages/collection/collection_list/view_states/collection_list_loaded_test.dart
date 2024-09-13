@@ -198,9 +198,8 @@ void main() {
       expect(find.text('Item 10'), findsOneWidget);
     });
 
-    testWidgets('searchbar filtered results should be shorted by title',
+    testWidgets('searchbar filtered results should be sorted by title',
         (WidgetTester tester) async {
-      // Arrange
       final items = [
         Item(
           id: ItemId.fromUniqueString('1'),

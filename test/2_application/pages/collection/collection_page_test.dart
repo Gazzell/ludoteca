@@ -1,10 +1,6 @@
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ludoteca/0_data/repositories/bgg_repository.dart';
-import 'package:ludoteca/0_data/repositories/collection_repository_mock.dart';
-import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_add_item/collection_add_item_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/collection_item_detail_page.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_list/collection_list_page.dart';
@@ -17,30 +13,16 @@ import 'package:mocktail_image_network/mocktail_image_network.dart';
 import '../../../helpers.dart';
 import '../../../mocks/go_route_mock.dart';
 
-class MockCollectionCubit extends MockCubit<CollectionCubitState>
-    implements CollectionCubit {}
-
-class MockBggRepository extends Mock implements BggRepository {}
-
 void main() {
   Widget widgetUnderTest({MockGoRouter? router}) {
     return withMaterialAppTranslation(
       Material(
         child: MockGoRouterProvider(
           goRouter: router ?? MockGoRouter(),
-          child: MultiRepositoryProvider(
-              providers: [
-                RepositoryProvider<CollectionRepository>(
-                  create: (context) => CollectionRepositoryMock(),
-                ),
-                RepositoryProvider<BggRepository>(
-                  create: (context) => MockBggRepository(),
-                ),
-              ],
-              child: BlocProvider(
-                create: (context) => CollectionCubit(),
-                child: const CollectionPage(),
-              )),
+          child: BlocProvider(
+            create: (context) => CollectionCubit(),
+            child: const CollectionPage(),
+          ),
         ),
       ),
     );

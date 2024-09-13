@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:ludoteca/0_data/data_sources/bgg_data_source.dart';
-import 'package:ludoteca/0_data/repositories/bgg_repository.dart';
-import 'package:ludoteca/0_data/repositories/collection_repository_mock.dart';
-import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
 import 'package:ludoteca/2_application/core/routes.dart';
 import 'package:ludoteca/i18n/strings.g.dart';
 
@@ -13,36 +8,26 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<BggRepository>(
-          create: (context) => BggRepository(bggDataSource: BggDataSource()),
+    return MaterialApp.router(
+      title: 'Ludoteca app',
+      routerConfig: routes,
+      themeMode: ThemeMode.system,
+      theme: ThemeData.from(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 239, 43, 187),
+          brightness: Brightness.light,
         ),
-        RepositoryProvider<CollectionRepository>(
-          create: (context) => CollectionRepositoryMock(),
-        ),
-      ],
-      child: MaterialApp.router(
-        title: 'Ludoteca app',
-        routerConfig: routes,
-        themeMode: ThemeMode.system,
-        theme: ThemeData.from(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 239, 43, 187),
-            brightness: Brightness.light,
-          ),
-        ),
-        darkTheme: ThemeData.from(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 239, 43, 187),
-          ),
-        ),
-        locale: TranslationProvider.of(context).flutterLocale,
-        supportedLocales: AppLocaleUtils.supportedLocales,
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
       ),
+      darkTheme: ThemeData.from(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 239, 43, 187),
+        ),
+      ),
+      locale: TranslationProvider.of(context).flutterLocale,
+      supportedLocales: AppLocaleUtils.supportedLocales,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
     );
   }
 }
