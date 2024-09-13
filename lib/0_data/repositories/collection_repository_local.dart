@@ -28,7 +28,7 @@ class CollectionRepositoryLocal implements CollectionRepository {
     try {
       final ids = await localDataSource.readItemIds();
       if (ids.isEmpty) {
-        return const Right([]);
+        return Right(List<Item>.empty());
       }
       final items = await localDataSource.readItems(ids);
       return Right(itemModelListToItemList(items));
