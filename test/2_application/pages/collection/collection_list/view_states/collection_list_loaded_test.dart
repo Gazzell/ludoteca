@@ -46,7 +46,7 @@ void main() {
                 mockCollectionListCubit ??
                 CollectionListCubit(
                   getCollectionItems: GetCollectionItems(
-                    collectionRepository: CollectionRepositoryMock(),
+                    collectionRepository: MockCollectionRepository(),
                   ),
                 ),
           ),
