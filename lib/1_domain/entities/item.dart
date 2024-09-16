@@ -5,7 +5,7 @@ import 'package:ludoteca/1_domain/entities/unique_id.dart';
 class Item extends Equatable {
   final ItemId id;
   final String title;
-  final List<String> instances;
+  final List<ItemInstanceId> instances;
   final String? bggId;
   final String? imageUrl;
   final String? thumbnailUrl;
@@ -51,7 +51,9 @@ class Item extends Equatable {
     return Item(
       id: ItemId.fromUniqueString(itemModel.id),
       title: itemModel.title,
-      instances: itemModel.instances,
+      instances: itemModel.instances
+          .map((id) => ItemInstanceId.fromUniqueString(id))
+          .toList(),
       bggId: itemModel.bggId,
       imageUrl: itemModel.imageUrl,
       thumbnailUrl: itemModel.thumbnailUrl,

@@ -8,7 +8,7 @@ enum ItemInstanceStatus {
 }
 
 class ItemInstance extends Equatable {
-  final int instanceId;
+  final ItemInstanceId id;
   final ItemId itemId;
   final ItemInstanceStatus status;
   final List<String>? incidences;
@@ -17,7 +17,7 @@ class ItemInstance extends Equatable {
   final UniqueId? borrowedBy;
 
   const ItemInstance({
-    required this.instanceId,
+    required this.id,
     required this.itemId,
     required this.status,
     this.incidences = const [],
@@ -26,9 +26,10 @@ class ItemInstance extends Equatable {
     this.borrowedBy,
   });
 
-  factory ItemInstance.fromItemInstanceModel(ItemInstanceModel itemInstanceModel) {
+  factory ItemInstance.fromItemInstanceModel(
+      ItemInstanceModel itemInstanceModel) {
     return ItemInstance(
-      instanceId: itemInstanceModel.instanceId,
+      id: ItemInstanceId.fromUniqueString(itemInstanceModel.id),
       itemId: ItemId.fromUniqueString(itemInstanceModel.itemId),
       status: itemInstanceModel.status == 'available'
           ? ItemInstanceStatus.available
@@ -44,7 +45,7 @@ class ItemInstance extends Equatable {
 
   @override
   List<Object?> get props => [
-        instanceId,
+        id,
         itemId,
         status,
         incidences,

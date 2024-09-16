@@ -8,7 +8,7 @@ part of 'item_instance_model.dart';
 
 ItemInstanceModel _$ItemInstanceModelFromJson(Map<String, dynamic> json) =>
     ItemInstanceModel(
-      instanceId: (json['instanceId'] as num).toInt(),
+      id: json['id'] as String,
       itemId: json['itemId'] as String,
       status: json['status'] as String,
       incidences: (json['incidences'] as List<dynamic>?)
@@ -26,7 +26,7 @@ ItemInstanceModel _$ItemInstanceModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ItemInstanceModelToJson(ItemInstanceModel instance) =>
     <String, dynamic>{
-      'instanceId': instance.instanceId,
+      'id': instance.id,
       'itemId': instance.itemId,
       'status': instance.status,
       'incidences': instance.incidences,
