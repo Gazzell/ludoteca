@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:ludoteca/0_data/data_sources/interfaces/collection_local_source_interface.dart';
 import 'package:ludoteca/0_data/exceptions/exceptions.dart';
+import 'package:ludoteca/0_data/models/item_instance_model.dart';
 import 'package:ludoteca/0_data/models/item_model.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/item_instance.dart';
@@ -83,6 +84,23 @@ class CollectionRepositoryLocal implements CollectionRepository {
           .toList());
     } on ItemInstanceNotFoundException catch (e) {
       return Left(ItemInstanceNotFoundFailure(itemInstanceId: e.instanceId));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(stackTrace: e.toString()));
+    } on Exception catch (e) {
+      return Left(ServerFailure(stackTrace: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ItemInstance>> addItemInstance(
+      ItemInstance itemInstance) async {
+    try {
+      final result = await localDataSource.addItemInstance(
+          itemInstanceModel: ItemInstanceModel.fromItemInstance(itemInstance));
+      if (!result) {
+        return Left(ItemNotFoundFailure(itemId: itemInstance.itemId.value));
+      }
+      return Right(itemInstance);
     } on CacheException catch (e) {
       return Left(CacheFailure(stackTrace: e.toString()));
     } on Exception catch (e) {

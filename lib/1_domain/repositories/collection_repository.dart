@@ -16,4 +16,6 @@ abstract class CollectionRepository {
   Future<Either<Failure, List<ItemInstance>>> getItemInstances(
     List<ItemInstanceId> itemInstanceIds,
   );
+
+  Future<Either<Failure, ItemInstance>> addItemInstance(ItemInstance itemInstance);
 }

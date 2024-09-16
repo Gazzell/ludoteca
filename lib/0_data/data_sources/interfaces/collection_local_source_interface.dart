@@ -11,4 +11,6 @@ abstract class CollectionLocalSourceInterface {
   Future<bool> addItem({required ItemModel itemModel});
 
   Future<List<ItemInstanceModel>> readItemInstances(List<String> itemIds);
+
+  Future<bool> addItemInstance({required ItemInstanceModel itemInstanceModel});
 }

@@ -35,7 +35,7 @@ class CollectionRepositoryMock implements CollectionRepository {
               id: item,
               title:
                   'Title of ${item.value} ${Random().nextInt(4) % 4 == 0 ? 'with a very long title and far more long, even too long' : ''}',
-              instances: const [],
+              instances: List<ItemInstanceId>.empty(growable: true),
               imageUrl:
                   'https://cf.geekdo-images.com/x3zxjr-Vw5iU4yDPg70Jgw__imagepagezoom/img/7a0LOL48K-7JNIOSGtcsNsIxkN0=/fit-in/1200x900/filters:no_upscale():strip_icc()/pic3490053.jpg',
               minAge: ages[Random().nextInt(ages.length)],
@@ -55,7 +55,7 @@ class CollectionRepositoryMock implements CollectionRepository {
           (index) {
             final status = ItemInstanceStatus
                 .values[Random().nextInt(ItemInstanceStatus.values.length)];
-            return ItemInstance(
+            final newInstance = ItemInstance(
               id: ItemInstanceId.fromUniqueString(
                   '${item.id.value}-instance-$index'),
               itemId: item.id,
@@ -72,6 +72,8 @@ class CollectionRepositoryMock implements CollectionRepository {
                   ? null
                   : UniqueId.fromUniqueString('borrower-$index'),
             );
+            item.instances.add(newInstance.id);
+            return newInstance;
           },
         ),
     ].fold<Map<String, ItemInstance>>(
@@ -124,6 +126,14 @@ class CollectionRepositoryMock implements CollectionRepository {
     _itemIds.add(item.id);
     _itemCollection[item.id.value] = item;
     return Future.value(Right(item));
+  }
+
+  @override
+  Future<Either<Failure, ItemInstance>> addItemInstance(
+      ItemInstance itemInstance) {
+    _itemCollection[itemInstance.itemId.value]!.instances.add(itemInstance.id);
+    _itemInstances[itemInstance.id.value] = itemInstance;
+    return Future.value(Right(itemInstance));
   }
 
   Item modelToItem({required ItemModel itemModel}) {
