@@ -63,20 +63,32 @@ class HiveLocalDataSource implements CollectionLocalSourceInterface {
 
   @override
   Future<List<ItemInstanceModel>> readItemInstances(
-      List<String> itemIds) async {
-    final box = await _openItemInstancesBox();
-    return Future.wait(itemIds.map((id) async {
-      final itemInstance = await  box.get(id);
+      List<String> itemInstaceIds) async {
+    final itemInstancesBox = await _openItemInstancesBox();
+    return Future.wait(itemInstaceIds.map((instanceId) async {
+      final itemInstance = await itemInstancesBox.get(instanceId);
       if (itemInstance == null) {
-        throw ItemInstanceNotFoundException(id);
+        throw ItemInstanceNotFoundException(instanceId);
       }
       return ItemInstanceModel.fromJson(itemInstance.cast<String, dynamic>());
     }).toList());
   }
-  
+
   @override
-  Future<bool> addItemInstance({required ItemInstanceModel itemInstanceModel}) {
-    // TODO: implement addItemInstance
-    throw UnimplementedError();
+  Future<bool> addItemInstance(
+      {required ItemInstanceModel itemInstanceModel}) async {
+    final itemBox = await _openItemsBox();
+    final item = await itemBox.get(itemInstanceModel.itemId);
+    if (item == null) {
+      throw ItemNotFoundException(itemInstanceModel.itemId);
+    }
+
+    item['instances'] = [...item['instances'], itemInstanceModel.id];
+    await itemBox.put(itemInstanceModel.itemId, item);
+
+    final itemInstancesBox = await _openItemInstancesBox();
+    await itemInstancesBox.put(itemInstanceModel.id, itemInstanceModel.toJson());
+
+    return true;
   }
 }
