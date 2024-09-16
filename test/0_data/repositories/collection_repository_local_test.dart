@@ -386,7 +386,8 @@ void main() {
       );
     });
 
-    test('should return a CacheFailure when localDataSource throws a CacheException',
+    test(
+        'should return a CacheFailure when localDataSource throws a CacheException',
         () async {
       final itemInstanceIds = [
         ItemInstanceId.fromUniqueString('id1'),
@@ -421,6 +422,99 @@ void main() {
           .thenThrow(Exception());
 
       final result = await repository.getItemInstances(itemInstanceIds);
+
+      expect(result, equals(Left(ServerFailure(stackTrace: 'Exception'))));
+    });
+  });
+
+  group('addItemInstance', () {
+    test('should return the ItemInstance when sucesfully added an it',
+        () async {
+      final itemInstanceToAdd = ItemInstance(
+        id: ItemInstanceId.fromUniqueString('instance1'),
+        itemId: ItemId.fromUniqueString('id1'),
+        status: ItemInstanceStatus.available,
+        borrowedBy: null,
+        returnedAt: DateTime.now(),
+      );
+
+      when(() => mockLocalDataSource.addItemInstance(
+              itemInstanceModel:
+                  ItemInstanceModel.fromItemInstance(itemInstanceToAdd)))
+          .thenAnswer((_) async => true);
+
+      final result = await repository.addItemInstance(itemInstanceToAdd);
+
+      expect(result, equals(Right(itemInstanceToAdd)));
+      verify(
+        () => mockLocalDataSource.addItemInstance(
+          itemInstanceModel:
+              ItemInstanceModel.fromItemInstance(itemInstanceToAdd),
+        ),
+      ).called(1);
+    });
+
+    test('should return a ItemNotFoundFailure when the item is not found',
+        () async {
+      final itemInstanceToAdd = ItemInstance(
+        id: ItemInstanceId.fromUniqueString('instance1'),
+        itemId: ItemId.fromUniqueString('id1'),
+        status: ItemInstanceStatus.available,
+        borrowedBy: null,
+        returnedAt: DateTime.now(),
+      );
+
+      when(() => mockLocalDataSource.addItemInstance(
+              itemInstanceModel:
+                  ItemInstanceModel.fromItemInstance(itemInstanceToAdd)))
+          .thenAnswer((_) => Future.value(false));
+
+      final result = await repository.addItemInstance(itemInstanceToAdd);
+
+      expect(result, equals(Left(ItemNotFoundFailure(itemId: 'id1'))));
+    });
+
+    test(
+        'should return a CacheFailure when localDataSource throws a CacheException',
+        () async {
+      final itemInstanceToAdd = ItemInstance(
+        id: ItemInstanceId.fromUniqueString('instance1'),
+        itemId: ItemId.fromUniqueString('id1'),
+        status: ItemInstanceStatus.available,
+        borrowedBy: null,
+        returnedAt: DateTime.now(),
+      );
+
+      when(() => mockLocalDataSource.addItemInstance(
+              itemInstanceModel:
+                  ItemInstanceModel.fromItemInstance(itemInstanceToAdd)))
+          .thenThrow(CacheException());
+
+      final result = await repository.addItemInstance(itemInstanceToAdd);
+
+      expect(result.isLeft, true);
+      expect(
+        result.left,
+        isA<CacheFailure>(),
+      );
+    });
+
+    test(
+        'should return a ServerFailure when localDataSource throws an Exception',
+        () async {
+      final itemInstanceToAdd = ItemInstance(
+        id: ItemInstanceId.fromUniqueString('instance1'),
+        itemId: ItemId.fromUniqueString('id1'),
+        status: ItemInstanceStatus.available,
+        borrowedBy: null,
+        returnedAt: DateTime.now(),
+      );
+      when(() => mockLocalDataSource.addItemInstance(
+              itemInstanceModel:
+                  ItemInstanceModel.fromItemInstance(itemInstanceToAdd)))
+          .thenThrow(Exception());
+
+      final result = await repository.addItemInstance(itemInstanceToAdd);
 
       expect(result, equals(Left(ServerFailure(stackTrace: 'Exception'))));
     });

@@ -73,4 +73,10 @@ class HiveLocalDataSource implements CollectionLocalSourceInterface {
       return ItemInstanceModel.fromJson(itemInstance.cast<String, dynamic>());
     }).toList());
   }
+  
+  @override
+  Future<bool> addItemInstance({required ItemInstanceModel itemInstanceModel}) {
+    // TODO: implement addItemInstance
+    throw UnimplementedError();
+  }
 }
