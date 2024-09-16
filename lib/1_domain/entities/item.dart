@@ -2,11 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:ludoteca/0_data/models/item_model.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 
-enum ItemStatus {
-  available,
-  unavailable,
-}
-
 class Item extends Equatable {
   final ItemId id;
   final String title;
