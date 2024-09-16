@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:either_dart/either.dart';
 import 'package:ludoteca/0_data/exceptions/exceptions.dart';
-import 'package:ludoteca/0_data/models/item_model.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/item_instance.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
@@ -134,20 +133,5 @@ class CollectionRepositoryMock implements CollectionRepository {
     _itemCollection[itemInstance.itemId.value]!.instances.add(itemInstance.id);
     _itemInstances[itemInstance.id.value] = itemInstance;
     return Future.value(Right(itemInstance));
-  }
-
-  Item modelToItem({required ItemModel itemModel}) {
-    return Item(
-      id: ItemId.fromUniqueString(itemModel.id),
-      bggId: itemModel.bggId,
-      title: itemModel.title,
-      instances: const [],
-      description: itemModel.description,
-      imageUrl: itemModel.imageUrl,
-      minAge: itemModel.minAge,
-      minPlayers: itemModel.minPlayers,
-      maxPlayers: itemModel.maxPlayers,
-      playingTime: itemModel.playingTime,
-    );
   }
 }
