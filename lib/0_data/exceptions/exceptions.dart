@@ -14,6 +14,15 @@ class ItemNotFoundException implements Exception {
   }
 }
 
+class ItemInstanceNotFoundException implements Exception {
+  final String instanceId;
+  ItemInstanceNotFoundException(this.instanceId);
+
+  String get message {
+    return 'Item instance $instanceId not found';
+  }
+}
+
 class ItemParseFailedException implements Exception {
   final String data;
   final String itemId;
