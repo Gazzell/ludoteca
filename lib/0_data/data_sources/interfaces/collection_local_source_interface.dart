@@ -1,3 +1,4 @@
+import 'package:ludoteca/0_data/models/item_instance_model.dart';
 import 'package:ludoteca/0_data/models/item_model.dart';
 
 abstract class CollectionLocalSourceInterface {
@@ -8,4 +9,6 @@ abstract class CollectionLocalSourceInterface {
   Future<ItemModel> readItem({required String itemId});
 
   Future<bool> addItem({required ItemModel itemModel});
+
+  Future<List<ItemInstanceModel>> readItemInstances(List<String> itemIds);
 }

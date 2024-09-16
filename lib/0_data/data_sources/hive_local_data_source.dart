@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:ludoteca/0_data/data_sources/interfaces/collection_local_source_interface.dart';
 import 'package:ludoteca/0_data/exceptions/exceptions.dart';
+import 'package:ludoteca/0_data/models/item_instance_model.dart';
 import 'package:ludoteca/0_data/models/item_model.dart';
 
 class HiveLocalDataSource implements CollectionLocalSourceInterface {
   late BoxCollection itemsCollection;
+  late BoxCollection itemInstancesCollection;
+
   bool isInitialized = false;
 
   Future<void> init() async {
@@ -16,7 +19,7 @@ class HiveLocalDataSource implements CollectionLocalSourceInterface {
 
     itemsCollection = await BoxCollection.open(
       'collection',
-      {'items'},
+      {'items', 'itemInstances'},
       path: './',
     );
     isInitialized = true;
@@ -24,6 +27,10 @@ class HiveLocalDataSource implements CollectionLocalSourceInterface {
 
   Future<CollectionBox<Map>> _openItemsBox() async {
     return itemsCollection.openBox<Map>('items');
+  }
+
+  Future<CollectionBox<Map>> _openItemInstancesBox() async {
+    return itemsCollection.openBox<Map>('itemInstances');
   }
 
   @override
@@ -52,5 +59,18 @@ class HiveLocalDataSource implements CollectionLocalSourceInterface {
   @override
   Future<List<ItemModel>> readItems(List<String> itemIds) {
     return Future.wait(itemIds.map((id) => readItem(itemId: id)).toList());
+  }
+
+  @override
+  Future<List<ItemInstanceModel>> readItemInstances(
+      List<String> itemIds) async {
+    final box = await _openItemInstancesBox();
+    return Future.wait(itemIds.map((id) async {
+      final itemInstance = await  box.get(id);
+      if (itemInstance == null) {
+        throw ItemInstanceNotFoundException(id);
+      }
+      return ItemInstanceModel.fromJson(itemInstance.cast<String, dynamic>());
+    }).toList());
   }
 }
