@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
+import 'package:ludoteca/1_domain/entities/item_instance.dart';
 
 import '../entities/unique_id.dart';
 import '../failures/failures.dart';
@@ -32,6 +33,15 @@ class AddItemParams extends Params {
 
   @override
   List<Object?> get props => [item];
+}
+
+class AddItemInstanceParams extends Params {
+  final ItemInstance itemInstance;
+
+  AddItemInstanceParams({required this.itemInstance});
+
+  @override
+  List<Object?> get props => [itemInstance];
 }
 
 class GetBggItemParams extends Params {

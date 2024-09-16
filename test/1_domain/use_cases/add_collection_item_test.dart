@@ -8,7 +8,7 @@ import 'package:ludoteca/1_domain/use_cases/add_collection_item.dart';
 import 'package:ludoteca/1_domain/use_cases/use_case.dart';
 import 'package:mocktail/mocktail.dart';
 
-class CollectionRepositoryMock extends Mock implements CollectionRepository {}
+class MockCollectionRepository extends Mock implements CollectionRepository {}
 
 void main() {
   final fakeItem = Item(
@@ -32,7 +32,7 @@ void main() {
   group('AddCollectionItem use case', () {
     group('should return Right', () {
       test('with an Item', () async {
-        final mockCollectionRepository = CollectionRepositoryMock();
+        final mockCollectionRepository = MockCollectionRepository();
         when(() => mockCollectionRepository.addItem(fakeItem)).thenAnswer(
           (_) async => Right(fakeItem),
         );
@@ -53,7 +53,7 @@ void main() {
 
     group('should return left', () {
       test('with a ServerFailure if threw an exception', () async {
-        final mockCollectionRepository = CollectionRepositoryMock();
+        final mockCollectionRepository = MockCollectionRepository();
         when(() => mockCollectionRepository.addItem(fakeItem)).thenThrow(
           Exception('something went wrong'),
         );

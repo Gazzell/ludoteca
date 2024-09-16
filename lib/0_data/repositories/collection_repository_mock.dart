@@ -130,6 +130,11 @@ class CollectionRepositoryMock implements CollectionRepository {
   @override
   Future<Either<Failure, ItemInstance>> addItemInstance(
       ItemInstance itemInstance) {
+    if (!_itemCollection.containsKey(itemInstance.itemId.value)) {
+      return Future.value(
+          Left(ItemNotFoundFailure(itemId: itemInstance.itemId.value)));
+    }
+    
     _itemCollection[itemInstance.itemId.value]!.instances.add(itemInstance.id);
     _itemInstances[itemInstance.id.value] = itemInstance;
     return Future.value(Right(itemInstance));
