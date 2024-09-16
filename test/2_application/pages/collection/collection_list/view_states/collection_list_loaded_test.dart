@@ -159,6 +159,36 @@ void main() {
       verify(() => mockCollectionListCubit.updateCollection(any())).called(1);
     });
 
+    testWidgets('search bar should not be visible if no items in the list',
+        (WidgetTester widgetTester) async {
+      widgetUnderTest(items: List<Item>.empty());
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(SearchBar), findsNothing);
+    });
+
+    testWidgets('search bar should be visible if items in the list',
+        (WidgetTester widgetTester) async {
+      await mockNetworkImages(
+        () async => widgetTester.pumpWidget(
+          widgetUnderTest(
+            items: List<Item>.generate(
+              2,
+              (index) => Item(
+                id: ItemId.fromUniqueString('$index'),
+                title: '',
+                instances: const [],
+              ),
+              growable: false,
+            ),
+          ),
+        ),
+      );
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(SearchBar), findsOneWidget);
+    });
+
     testWidgets('search bar should filter items by title',
         (WidgetTester widgetTester) async {
       final itemList = List<Item>.generate(
@@ -235,7 +265,7 @@ void main() {
 
       final sortedItems = tester
           .widgetList<CollectionListItem>(find.byType(CollectionListItem));
-          
+
       expect(sortedItems.length, 2);
       expect(
         sortedItems.elementAt(0).item.title,
