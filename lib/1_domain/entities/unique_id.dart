@@ -29,3 +29,15 @@ class ItemId extends UniqueId {
     return ItemId._(uniqueString);
   }
 }
+
+class ItemInstanceId extends UniqueId {
+  const ItemInstanceId._(super.value) : super._();
+
+  factory ItemInstanceId() {
+    return ItemInstanceId._(const Uuid().v4());
+  }
+
+  factory ItemInstanceId.fromUniqueString(String uniqueString) {
+    return ItemInstanceId._(uniqueString);
+  }
+}

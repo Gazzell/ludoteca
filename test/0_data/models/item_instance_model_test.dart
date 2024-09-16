@@ -7,7 +7,7 @@ void main() {
   group('ItemInstanceModel', () {
     test('fromItemInstanceModel should return an ItemInstanceModel', () {
       final itemInstance = ItemInstance(
-        instanceId: 1,
+        id: ItemInstanceId.fromUniqueString('1'),
         itemId: ItemId.fromUniqueString('1'),
         status: ItemInstanceStatus.available,
         incidences: const ['incidence'],
@@ -16,10 +16,11 @@ void main() {
         borrowedBy: UniqueId.fromUniqueString('borrower'),
       );
 
-      final itemInstanceModel = ItemInstanceModel.fromItemInstance(itemInstance);
+      final itemInstanceModel =
+          ItemInstanceModel.fromItemInstance(itemInstance);
 
       final expectedItemInstanceModel = ItemInstanceModel(
-        instanceId: 1,
+        id: '1',
         itemId: '1',
         status: 'available',
         incidences: const ['incidence'],

@@ -62,7 +62,10 @@ void main() {
         publishYear: 1986,
         complexity: 3.5,
         rating: 4.2,
-        instances: const ['instance1', 'instance2'],
+        instances: [
+          ItemInstanceId.fromUniqueString('instance1'),
+          ItemInstanceId.fromUniqueString('instance2')
+        ],
       );
 
       // Convert Item to ItemModel

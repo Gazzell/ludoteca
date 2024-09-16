@@ -39,7 +39,9 @@ void main() {
           Item(
             id: ItemId.fromUniqueString(itemModel.id),
             title: itemModel.title,
-            instances: itemModel.instances,
+            instances: itemModel.instances
+                .map((id) => ItemInstanceId.fromUniqueString(id))
+                .toList(),
             bggId: itemModel.bggId,
             imageUrl: itemModel.imageUrl,
             thumbnailUrl: itemModel.thumbnailUrl,

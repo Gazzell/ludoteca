@@ -7,7 +7,7 @@ void main() {
   group('ItemInstance', () {
     test('should create an ItemInstance from an ItemInstanceModel', () {
       final itemInstanceModel = ItemInstanceModel(
-        instanceId: 1,
+        id: '0',
         itemId: '1',
         status: 'available',
         incidences: const ['incidence'],
@@ -20,7 +20,7 @@ void main() {
           ItemInstance.fromItemInstanceModel(itemInstanceModel);
 
       final expectedItemInstance = ItemInstance(
-        instanceId: itemInstanceModel.instanceId,
+        id: ItemInstanceId.fromUniqueString('0'),
         itemId: ItemId.fromUniqueString(itemInstanceModel.itemId),
         status: ItemInstanceStatus.available,
         incidences: itemInstanceModel.incidences,

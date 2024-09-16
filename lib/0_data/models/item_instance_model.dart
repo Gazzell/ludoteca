@@ -6,7 +6,7 @@ part 'item_instance_model.g.dart';
 
 @JsonSerializable()
 class ItemInstanceModel extends Equatable {
-  final int instanceId;
+  final String id;
   final String itemId;
   final String status;
   final List<String>? incidences;
@@ -15,7 +15,7 @@ class ItemInstanceModel extends Equatable {
   final String? borrowedBy;
 
   const ItemInstanceModel({
-    required this.instanceId,
+    required this.id,
     required this.itemId,
     required this.status,
     this.incidences = const [],
@@ -29,7 +29,7 @@ class ItemInstanceModel extends Equatable {
 
   factory ItemInstanceModel.fromItemInstance(ItemInstance itemInstance) =>
       ItemInstanceModel(
-        instanceId: itemInstance.instanceId,
+        id: itemInstance.id.value,
         itemId: itemInstance.itemId.value,
         status: itemInstance.status.name,
         incidences: itemInstance.incidences,
@@ -42,7 +42,7 @@ class ItemInstanceModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        instanceId,
+        id,
         itemId,
         status,
         incidences,

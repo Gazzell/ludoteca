@@ -66,7 +66,7 @@ class ItemModel extends Equatable {
         publishYear: item.publishYear,
         complexity: item.complexity,
         rating: item.rating,
-        instances: item.instances,
+        instances: item.instances.map((instaceId) => instaceId.value).toList(),
       );
 
   Map<String, dynamic> toJson() => _$ItemModelToJson(this);

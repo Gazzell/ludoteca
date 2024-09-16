@@ -101,9 +101,12 @@ void main() {
         equals(itemModelList
             .map(
               (itemModel) => Item(
-                  id: ItemId.fromUniqueString(itemModel.id),
-                  title: itemModel.title,
-                  instances: itemModel.instances),
+                id: ItemId.fromUniqueString(itemModel.id),
+                title: itemModel.title,
+                instances: itemModel.instances
+                    .map((id) => ItemInstanceId.fromUniqueString(id))
+                    .toList(),
+              ),
             )
             .toList()),
       );
@@ -180,7 +183,9 @@ void main() {
           Item(
             id: ItemId.fromUniqueString(itemModel.id),
             title: itemModel.title,
-            instances: itemModel.instances,
+            instances: itemModel.instances
+                .map((id) => ItemInstanceId.fromUniqueString(id))
+                .toList(),
           ),
         ),
       );
@@ -335,7 +340,10 @@ void main() {
             Item(
               id: ItemId.fromUniqueString(itemModelList[index].id),
               title: itemModelList[index].title,
-              instances: itemModelList[index].instances,
+              instances: itemModelList[index]
+                  .instances
+                  .map((id) => ItemInstanceId.fromUniqueString(id))
+                  .toList(),
               bggId: itemModelList[index].bggId,
               imageUrl: itemModelList[index].imageUrl,
               thumbnailUrl: itemModelList[index].thumbnailUrl,
