@@ -87,10 +87,13 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
         body: Center(
           child: Column(
             children: [
-              SearchBar(
-                leading: const Icon(Icons.search_outlined),
-                onChanged: _onSearchBarChanged,
-                hintText: t.collectionSearch,
+              Visibility(
+                visible: filteredItems.isNotEmpty,
+                child: SearchBar(
+                  leading: const Icon(Icons.search_outlined),
+                  onChanged: _onSearchBarChanged,
+                  hintText: t.collectionSearch,
+                ),
               ),
               Expanded(
                 child: ListView.builder(
