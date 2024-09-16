@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:either_dart/either.dart';
+import 'package:ludoteca/0_data/exceptions/exceptions.dart';
 import 'package:ludoteca/0_data/models/item_model.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
+import 'package:ludoteca/1_domain/entities/item_instance.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/failures/failures.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
@@ -18,6 +20,8 @@ class CollectionRepositoryMock implements CollectionRepository {
   final ages = [0, 5, 8, 10, 12, 14, 18];
 
   final times = [5, 15, 30, 45, 60, 120, 180];
+
+  late Map<String, ItemInstance> _itemInstances;
 
   CollectionRepositoryMock() {
     _itemCollection = Map.fromEntries(
@@ -43,6 +47,37 @@ class CollectionRepositoryMock implements CollectionRepository {
         },
       ),
     );
+
+    _itemInstances = [
+      for (var item in _itemCollection.values)
+        ...List<ItemInstance>.generate(
+          Random().nextInt(5),
+          (index) {
+            final status = ItemInstanceStatus
+                .values[Random().nextInt(ItemInstanceStatus.values.length)];
+            return ItemInstance(
+              id: ItemInstanceId.fromUniqueString(
+                  '${item.id.value}-instance-$index'),
+              itemId: item.id,
+              status: status,
+              borrowedAt: status == ItemInstanceStatus.available
+                  ? null
+                  : DateTime.now()
+                      .subtract(Duration(days: Random().nextInt(15))),
+              returnedAt: status == ItemInstanceStatus.unavailable
+                  ? null
+                  : DateTime.now()
+                      .subtract(Duration(days: Random().nextInt(15))),
+              borrowedBy: status == ItemInstanceStatus.available
+                  ? null
+                  : UniqueId.fromUniqueString('borrower-$index'),
+            );
+          },
+        ),
+    ].fold<Map<String, ItemInstance>>(
+      {},
+      (map, instances) => map..addAll({instances.id.value: instances}),
+    );
   }
 
   @override
@@ -64,6 +99,24 @@ class CollectionRepositoryMock implements CollectionRepository {
       return Future.value(Left(ServerFailure(stackTrace: e.toString())));
     }
     return Future.value(Right(item));
+  }
+
+  @override
+  Future<Either<Failure, List<ItemInstance>>> getItemInstances(
+      List<ItemInstanceId> itemInstanceIds) {
+    try {
+      final itemInstances = itemInstanceIds.map((id) {
+        if (!_itemInstances.containsKey(id.value)) {
+          throw ItemInstanceNotFoundException(id.value);
+        }
+        return _itemInstances[id.value]!;
+      }).toList();
+      return Future.value(Right(itemInstances));
+    } on ItemInstanceNotFoundException catch (e) {
+      return Future.value(Left(
+        ItemInstanceNotFoundFailure(itemInstanceId: e.instanceId),
+      ));
+    }
   }
 
   @override

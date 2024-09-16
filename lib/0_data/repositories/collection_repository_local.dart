@@ -3,6 +3,7 @@ import 'package:ludoteca/0_data/data_sources/interfaces/collection_local_source_
 import 'package:ludoteca/0_data/exceptions/exceptions.dart';
 import 'package:ludoteca/0_data/models/item_model.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
+import 'package:ludoteca/1_domain/entities/item_instance.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/failures/failures.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
@@ -64,6 +65,24 @@ class CollectionRepositoryLocal implements CollectionRepository {
         return Left(CacheFailure(stackTrace: 'Error adding item'));
       }
       return Right(newItem);
+    } on CacheException catch (e) {
+      return Left(CacheFailure(stackTrace: e.toString()));
+    } on Exception catch (e) {
+      return Left(ServerFailure(stackTrace: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ItemInstance>>> getItemInstances(
+      List<ItemInstanceId> itemIds) async {
+    try {
+      final instances = await localDataSource.readItemInstances(
+          itemIds.map((instanceId) => instanceId.value).toList());
+      return Right(instances
+          .map((instance) => ItemInstance.fromItemInstanceModel(instance))
+          .toList());
+    } on ItemInstanceNotFoundException catch (e) {
+      return Left(ItemInstanceNotFoundFailure(itemInstanceId: e.instanceId));
     } on CacheException catch (e) {
       return Left(CacheFailure(stackTrace: e.toString()));
     } on Exception catch (e) {

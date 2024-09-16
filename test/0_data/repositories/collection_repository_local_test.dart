@@ -2,8 +2,10 @@ import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/0_data/data_sources/interfaces/collection_local_source_interface.dart';
 import 'package:ludoteca/0_data/exceptions/exceptions.dart';
+import 'package:ludoteca/0_data/models/item_instance_model.dart';
 import 'package:ludoteca/0_data/models/item_model.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
+import 'package:ludoteca/1_domain/entities/item_instance.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/failures/failures.dart';
 import 'package:ludoteca/0_data/repositories/collection_repository_local.dart';
@@ -285,6 +287,140 @@ void main() {
           itemModel: ItemModel.fromItem(itemToAdd))).thenThrow(Exception());
 
       final result = await repository.addItem(itemToAdd);
+
+      expect(result, equals(Left(ServerFailure(stackTrace: 'Exception'))));
+    });
+  });
+
+  group('getItemInstances', () {
+    test(
+        'should return a List of ItemInstance when given a List of ItemId and all instances are found',
+        () async {
+      final itemInstanceIds = [
+        ItemInstanceId.fromUniqueString('id1'),
+        ItemInstanceId.fromUniqueString('id2'),
+        ItemInstanceId.fromUniqueString('id3'),
+      ];
+
+      final nowTime = DateTime.now();
+      final prevTime = nowTime.subtract(const Duration(days: 15));
+
+      final itemInstanceModels = [
+        ItemInstanceModel(
+          id: 'instance1',
+          itemId: 'id1',
+          status: 'available',
+          borrowedBy: null,
+          returnedAt: nowTime,
+        ),
+        ItemInstanceModel(
+          id: 'instance2',
+          itemId: 'id2',
+          status: 'unavailable',
+          borrowedBy: 'borrower',
+          borrowedAt: prevTime,
+        ),
+        const ItemInstanceModel(
+          id: 'instance3',
+          itemId: 'id3',
+          status: 'available',
+          incidences: ['incidence'],
+        ),
+      ];
+
+      final finalItemInstances = [
+        ItemInstance(
+          id: ItemInstanceId.fromUniqueString('instance1'),
+          itemId: ItemId.fromUniqueString('id1'),
+          status: ItemInstanceStatus.available,
+          borrowedBy: null,
+          returnedAt: nowTime,
+        ),
+        ItemInstance(
+          id: ItemInstanceId.fromUniqueString('instance2'),
+          itemId: ItemId.fromUniqueString('id2'),
+          status: ItemInstanceStatus.unavailable,
+          borrowedBy: UniqueId.fromUniqueString('borrower'),
+          borrowedAt: prevTime,
+        ),
+        ItemInstance(
+          id: ItemInstanceId.fromUniqueString('instance3'),
+          itemId: ItemId.fromUniqueString('id3'),
+          status: ItemInstanceStatus.available,
+          incidences: const ['incidence'],
+        ),
+      ];
+
+      when(() => mockLocalDataSource.readItemInstances(
+              itemInstanceIds.map((itemId) => itemId.value).toList()))
+          .thenAnswer((_) async => itemInstanceModels);
+
+      final result = await repository.getItemInstances(itemInstanceIds);
+
+      expect(result.isRight, true);
+      expect(
+        result.right,
+        equals(finalItemInstances),
+      );
+    });
+
+    test(
+        'should return an ItemInstanceNotFoundFailure when an instance is not found',
+        () async {
+      final itemInstanceIds = [
+        ItemInstanceId.fromUniqueString('id1'),
+        ItemInstanceId.fromUniqueString('id2'),
+        ItemInstanceId.fromUniqueString('id3'),
+      ];
+
+      when(() => mockLocalDataSource.readItemInstances(
+              itemInstanceIds.map((itemId) => itemId.value).toList()))
+          .thenThrow(ItemInstanceNotFoundException('id2'));
+
+      final result = await repository.getItemInstances(itemInstanceIds);
+
+      expect(result.isLeft, true);
+      expect(
+        result.left,
+        isA<ItemInstanceNotFoundFailure>(),
+      );
+    });
+
+    test('should return a CacheFailure when localDataSource throws a CacheException',
+        () async {
+      final itemInstanceIds = [
+        ItemInstanceId.fromUniqueString('id1'),
+        ItemInstanceId.fromUniqueString('id2'),
+        ItemInstanceId.fromUniqueString('id3'),
+      ];
+
+      when(() => mockLocalDataSource.readItemInstances(
+              itemInstanceIds.map((itemId) => itemId.value).toList()))
+          .thenThrow(CacheException());
+
+      final result = await repository.getItemInstances(itemInstanceIds);
+
+      expect(result.isLeft, true);
+      expect(
+        result.left,
+        isA<CacheFailure>(),
+      );
+    });
+
+    test(
+        'should return a ServerFailure when localDataSource throws an Exception',
+        () async {
+      final itemInstanceIds = [
+        ItemInstanceId.fromUniqueString('id1'),
+        ItemInstanceId.fromUniqueString('id2'),
+        ItemInstanceId.fromUniqueString('id3'),
+      ];
+
+      when(() => mockLocalDataSource.readItemInstances(
+              itemInstanceIds.map((itemId) => itemId.value).toList()))
+          .thenThrow(Exception());
+
+      final result = await repository.getItemInstances(itemInstanceIds);
 
       expect(result, equals(Left(ServerFailure(stackTrace: 'Exception'))));
     });
