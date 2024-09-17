@@ -74,7 +74,7 @@ class CollectionRepositoryLocal implements CollectionRepository {
   }
 
   @override
-  Future<Either<Failure, List<ItemInstance>>> getItemInstances(
+  Future<Either<Failure, List<ItemInstance>>> readItemInstances(
       List<ItemInstanceId> itemIds) async {
     try {
       final instances = await localDataSource.readItemInstances(
