@@ -103,7 +103,7 @@ class CollectionRepositoryMock implements CollectionRepository {
   }
 
   @override
-  Future<Either<Failure, List<ItemInstance>>> getItemInstances(
+  Future<Either<Failure, List<ItemInstance>>> readItemInstances(
       List<ItemInstanceId> itemInstanceIds) {
     try {
       final itemInstances = itemInstanceIds.map((id) {
@@ -134,7 +134,7 @@ class CollectionRepositoryMock implements CollectionRepository {
       return Future.value(
           Left(ItemNotFoundFailure(itemId: itemInstance.itemId.value)));
     }
-    
+
     _itemCollection[itemInstance.itemId.value]!.instances.add(itemInstance.id);
     _itemInstances[itemInstance.id.value] = itemInstance;
     return Future.value(Right(itemInstance));

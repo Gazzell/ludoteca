@@ -355,7 +355,7 @@ void main() {
               itemInstanceIds.map((itemId) => itemId.value).toList()))
           .thenAnswer((_) async => itemInstanceModels);
 
-      final result = await repository.getItemInstances(itemInstanceIds);
+      final result = await repository.readItemInstances(itemInstanceIds);
 
       expect(result.isRight, true);
       expect(
@@ -377,7 +377,7 @@ void main() {
               itemInstanceIds.map((itemId) => itemId.value).toList()))
           .thenThrow(ItemInstanceNotFoundException('id2'));
 
-      final result = await repository.getItemInstances(itemInstanceIds);
+      final result = await repository.readItemInstances(itemInstanceIds);
 
       expect(result.isLeft, true);
       expect(
@@ -399,7 +399,7 @@ void main() {
               itemInstanceIds.map((itemId) => itemId.value).toList()))
           .thenThrow(CacheException());
 
-      final result = await repository.getItemInstances(itemInstanceIds);
+      final result = await repository.readItemInstances(itemInstanceIds);
 
       expect(result.isLeft, true);
       expect(
@@ -421,7 +421,7 @@ void main() {
               itemInstanceIds.map((itemId) => itemId.value).toList()))
           .thenThrow(Exception());
 
-      final result = await repository.getItemInstances(itemInstanceIds);
+      final result = await repository.readItemInstances(itemInstanceIds);
 
       expect(result, equals(Left(ServerFailure(stackTrace: 'Exception'))));
     });

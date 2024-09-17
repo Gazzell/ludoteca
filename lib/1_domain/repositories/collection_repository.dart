@@ -13,9 +13,10 @@ abstract class CollectionRepository {
 
   Future<Either<Failure, Item>> addItem(Item item);
 
-  Future<Either<Failure, List<ItemInstance>>> getItemInstances(
+  Future<Either<Failure, List<ItemInstance>>> readItemInstances(
     List<ItemInstanceId> itemInstanceIds,
   );
 
-  Future<Either<Failure, ItemInstance>> addItemInstance(ItemInstance itemInstance);
+  Future<Either<Failure, ItemInstance>> addItemInstance(
+      ItemInstance itemInstance);
 }
