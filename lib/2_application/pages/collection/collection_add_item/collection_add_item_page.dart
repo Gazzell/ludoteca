@@ -3,6 +3,7 @@ import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ludoteca/0_data/repositories/bgg_repository.dart';
+import 'package:ludoteca/1_domain/use_cases/add_item_instance.dart';
 import 'package:ludoteca/1_domain/use_cases/get_bgg_item.dart';
 import 'package:ludoteca/i18n/strings.g.dart';
 import '../../../../1_domain/entities/item.dart';
@@ -36,6 +37,9 @@ class CollectionAddItemPageProvider extends StatelessWidget {
         return CollectionAddItemCubit(
           getBggItem: GetBggItem(bggRepository: bggRepository),
           addItem: AddCollectionItem(
+            collectionRepository: collectionRepository,
+          ),
+          addItemInstance: AddItemInstance(
             collectionRepository: collectionRepository,
           ),
         );

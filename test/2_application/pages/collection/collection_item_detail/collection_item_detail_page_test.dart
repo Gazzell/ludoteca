@@ -111,7 +111,8 @@ void main() {
             Stream.fromIterable([
               const CollectionItemDetailEmptyState(),
               const CollectionItemDetailLoadingState(),
-              CollectionItemDetailLoadedState(item: Item.empty()),
+              CollectionItemDetailLoadedState(
+                  item: Item.empty(), itemInstances: const []),
             ]),
             initialState: const CollectionItemDetailEmptyState(),
           );

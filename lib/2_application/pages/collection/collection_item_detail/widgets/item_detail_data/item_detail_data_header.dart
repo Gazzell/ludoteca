@@ -4,11 +4,15 @@ import 'package:ludoteca/2_application/pages/collection/collection_item_detail/w
 class ItemDetailDataHeader extends StatelessWidget {
   final double rating;
   final String title;
+  final bool showItemInstancesButton;
+  final VoidCallback? onShowItemInstances;
 
   const ItemDetailDataHeader({
     super.key,
     required this.title,
     this.rating = -1,
+    this.showItemInstancesButton = false,
+    this.onShowItemInstances,
   });
 
   @override
@@ -16,7 +20,7 @@ class ItemDetailDataHeader extends StatelessWidget {
     return Row(
       children: [
         RatingStar(rating: rating),
-        Flexible(
+        Expanded(
           child: Container(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -25,6 +29,11 @@ class ItemDetailDataHeader extends StatelessWidget {
             ),
           ),
         ),
+        if (showItemInstancesButton)
+          IconButton(
+            icon: const Icon(Icons.list),
+            onPressed: onShowItemInstances,
+          ),
       ],
     );
   }
