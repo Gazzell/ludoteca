@@ -9,7 +9,10 @@ import 'package:mocktail_image_network/mocktail_image_network.dart';
 void main() {
   Widget widgetUnderTest(Item item) {
     return MaterialApp(
-      home: CollectionItemDetailLoaded(item: item),
+      home: CollectionItemDetailLoaded(
+        item: item,
+        itemInstances: const [],
+      ),
     );
   }
 

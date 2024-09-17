@@ -20,7 +20,11 @@ final class CollectionItemDetailErrorState
 final class CollectionItemDetailLoadedState
     extends CollectionItemDetailCubitState {
   final Item item;
-  const CollectionItemDetailLoadedState({required this.item}) : super();
+  final List<ItemInstance> itemInstances;
+  const CollectionItemDetailLoadedState({
+    required this.item,
+    required this.itemInstances,
+  }) : super();
 
   @override
   List<Object> get props => [item];

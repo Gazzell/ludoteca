@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
 import 'package:ludoteca/1_domain/repositories/collection_repository.dart';
 import 'package:ludoteca/1_domain/use_cases/get_item.dart';
+import 'package:ludoteca/1_domain/use_cases/get_item_instances.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/cubit/collection_item_detail_cubit.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_empty.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/view_states/collection_item_detail_error.dart';
@@ -23,13 +24,14 @@ class CollectionItemDetailPageProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final collectionRepository =
+        RepositoryProvider.of<CollectionRepository>(context);
     return BlocProvider(
       create: (context) {
         return CollectionItemDetailCubit(
-          getItem: GetItem(
-            collectionRepository:
-                RepositoryProvider.of<CollectionRepository>(context),
-          ),
+          getItem: GetItem(collectionRepository: collectionRepository),
+          getItemInstances:
+              GetItemInstances(collectionRepository: collectionRepository),
         )..readItemDetail(selectedItem);
       },
       child: CollectionItemDetailPage(
@@ -78,7 +80,10 @@ class CollectionItemDetailPage extends StatelessWidget {
               return const CollectionItemDetailLoading();
             }
             if (state is CollectionItemDetailLoadedState) {
-              return CollectionItemDetailLoaded(item: state.item);
+              return CollectionItemDetailLoaded(
+                item: state.item,
+                itemInstances: state.itemInstances,
+              );
             }
             if (state is CollectionItemDetailEmptyState) {
               return const CollectionItemDetailEmpty();
