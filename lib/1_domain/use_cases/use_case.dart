@@ -44,6 +44,15 @@ class AddItemInstanceParams extends Params {
   List<Object?> get props => [itemInstance];
 }
 
+class GetItemInstancesParams extends Params {
+  final List<ItemInstanceId> itemInstanceIds;
+
+  GetItemInstancesParams({required this.itemInstanceIds});
+
+  @override
+  List<Object?> get props => [itemInstanceIds];
+}
+
 class GetBggItemParams extends Params {
   final String itemId;
 
