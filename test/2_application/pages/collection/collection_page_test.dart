@@ -35,86 +35,132 @@ void main() {
 
       expect(find.byType(CollectionListPage), findsOneWidget);
     });
+    group('in small and medium screens', () {
+      testWidgets('should navigate to item', (WidgetTester tester) async {
+        final mockGoRouter = MockGoRouter();
 
-    testWidgets('should render a CollectionItemDetail page',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(widgetUnderTest());
+        when(() => mockGoRouter.pushNamed('itemDetail'))
+            .thenAnswer((invocation) async => Future.value('anything'));
 
-      expect(find.byType(CollectionItemDetailPage), findsOneWidget);
-    });
+        await mockNetworkImages(() async {
+          await tester.pumpWidget(widgetUnderTest(router: mockGoRouter));
+          await tester.pumpAndSettle();
+        });
 
-    // TODO: tests using physicalSize seems to be very flakey. Find a way of improving these
-    testWidgets('should navigate to item detail page on small screen',
-        (WidgetTester tester) async {
-      final mockGoRouter = MockGoRouter();
+        final item = find.byType(CollectionListItem).first;
 
-      tester.view.physicalSize = const Size(300, 200);
-      tester.view.devicePixelRatio = 1;
+        expect(item, findsOneWidget);
 
-      addTearDown(tester.view.resetPhysicalSize);
+        await tester.tap(item);
 
-      when(() => mockGoRouter.pushNamed('itemDetail'))
-          .thenAnswer((invocation) async => Future.value('anything'));
-
-      await mockNetworkImages(() async {
-        await tester.pumpWidget(widgetUnderTest(router: mockGoRouter));
         await tester.pumpAndSettle();
+
+        verify(
+          () => mockGoRouter.pushNamed(
+            'itemDetail',
+            pathParameters: {
+              'itemId': 'item-0',
+            },
+          ),
+        ).called(1);
       });
 
-      final item = find.byType(CollectionListItem).first;
+      group('in big screens', () {
+        testWidgets('should render a CollectionItemDetail page',
+            (WidgetTester tester) async {
+          tester.view.physicalSize = const Size(1400, 800);
+          tester.view.devicePixelRatio = 1;
 
-      expect(item, findsOneWidget);
+          addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.tap(item);
+          await tester.pumpWidget(widgetUnderTest());
 
-      await tester.pumpAndSettle();
+          expect(find.byType(CollectionItemDetailPage), findsOneWidget);
+        });
 
-      verify(
-        () => mockGoRouter.pushNamed(
-          'itemDetail',
-          pathParameters: {
-            'itemId': 'item-0',
-          },
-        ),
-      ).called(1);
-    });
+        // TODO: tests using physicalSize seems to be very flakey. Find a way of improving these
 
-    testWidgets('selecting item should render item detail',
-        (WidgetTester tester) async {
-      await mockNetworkImages(() async {
-        await tester.pumpWidget(widgetUnderTest());
-        await tester.pumpAndSettle();
+        testWidgets('selecting item should render item detail',
+            (WidgetTester tester) async {
+          tester.view.physicalSize = const Size(1400, 800);
+          tester.view.devicePixelRatio = 1;
+
+          addTearDown(tester.view.resetPhysicalSize);
+
+          await mockNetworkImages(() async {
+            await tester.pumpWidget(widgetUnderTest());
+            await tester.pumpAndSettle();
+          });
+
+          final item = find.byType(CollectionListItem).first;
+
+          expect(item, findsOneWidget);
+
+          await tester.tap(item);
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(CollectionItemDetailPage), findsOneWidget);
+        });
+
+        testWidgets('should render a CollectionItemAdd page',
+            (WidgetTester tester) async {
+          tester.view.physicalSize = const Size(1400, 800);
+          tester.view.devicePixelRatio = 1;
+
+          addTearDown(tester.view.resetPhysicalSize);
+          await mockNetworkImages(() async {
+            await tester.pumpWidget(widgetUnderTest());
+            await tester.pumpAndSettle();
+          });
+
+          final addButton = find.byKey(const Key('add_item_fab'));
+
+          expect(addButton, findsOneWidget);
+
+          await tester.tap(addButton);
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(CollectionAddItemPage), findsOneWidget);
+        });
+
+        testWidgets(
+            'should show item detail when adding an item and selecting a different one',
+            (WidgetTester tester) async {
+          tester.view.physicalSize = const Size(1400, 800);
+          tester.view.devicePixelRatio = 1;
+
+          addTearDown(tester.view.resetPhysicalSize);
+          
+          await mockNetworkImages(() async {
+            await tester.pumpWidget(widgetUnderTest());
+            await tester.pumpAndSettle();
+          });
+
+          final addButton = find.byKey(const Key('add_item_fab'));
+
+          expect(addButton, findsOneWidget);
+
+          await tester.tap(addButton);
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(CollectionAddItemPage), findsOneWidget);
+
+          final item = find.byType(CollectionListItem).first;
+
+          expect(item, findsOneWidget);
+
+          await tester.tap(item);
+
+          await tester.pumpAndSettle();
+
+          expect(find.byType(CollectionItemDetailPage), findsOneWidget);
+          expect(find.byType(CollectionAddItemPage), findsNothing);
+        });
       });
-
-      final item = find.byType(CollectionListItem).first;
-
-      expect(item, findsOneWidget);
-
-      await tester.tap(item);
-
-      await tester.pumpAndSettle();
-
-      expect(find.byType(CollectionItemDetailPage), findsOneWidget);
     });
-
-    testWidgets('should render a CollectionItemAdd page',
-        (WidgetTester tester) async {
-      await mockNetworkImages(() async {
-        await tester.pumpWidget(widgetUnderTest());
-        await tester.pumpAndSettle();
-      });
-
-      final addButton = find.byKey(const Key('add_item_fab'));
-
-      expect(addButton, findsOneWidget);
-
-      await tester.tap(addButton);
-
-      await tester.pumpAndSettle();
-
-      expect(find.byType(CollectionAddItemPage), findsOneWidget);
-    });
-
     // TODO: Fix this test. It looks like the extra parameter if fighting with mockito
     // testWidgets('should navigate to add item page on small screen',
     //     (WidgetTester tester) async {
@@ -145,35 +191,5 @@ void main() {
 
     //   verify(() => mockGoRouter.pushNamed(any())).called(1);
     // });
-
-    testWidgets(
-        'should show item detail when adding an item and selecting a different one',
-        (WidgetTester tester) async {
-      await mockNetworkImages(() async {
-        await tester.pumpWidget(widgetUnderTest());
-        await tester.pumpAndSettle();
-      });
-
-      final addButton = find.byKey(const Key('add_item_fab'));
-
-      expect(addButton, findsOneWidget);
-
-      await tester.tap(addButton);
-
-      await tester.pumpAndSettle();
-
-      expect(find.byType(CollectionAddItemPage), findsOneWidget);
-
-      final item = find.byType(CollectionListItem).first;
-
-      expect(item, findsOneWidget);
-
-      await tester.tap(item);
-
-      await tester.pumpAndSettle();
-
-      expect(find.byType(CollectionItemDetailPage), findsOneWidget);
-      expect(find.byType(CollectionAddItemPage), findsNothing);
-    });
   });
 }

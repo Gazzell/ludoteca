@@ -46,23 +46,20 @@ class CollectionListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.secondaryContainer,
-      child: BlocBuilder<CollectionListCubit, CollectionListCubitState>(
-        builder: (context, state) {
-          if (state is CollectionListLoadingState) {
-            return const CollectionListLoading();
-          }
-          if (state is CollectionListItemsLoadedState) {
-            return CollectionListLoaded(
-              items: state.items,
-              onItemTapped: onItemTapped,
-              selectedItem: selectedItem,
-            );
-          }
-          return const CollectionListError();
-        },
-      ),
+    return BlocBuilder<CollectionListCubit, CollectionListCubitState>(
+      builder: (context, state) {
+        if (state is CollectionListLoadingState) {
+          return const CollectionListLoading();
+        }
+        if (state is CollectionListItemsLoadedState) {
+          return CollectionListLoaded(
+            items: state.items,
+            onItemTapped: onItemTapped,
+            selectedItem: selectedItem,
+          );
+        }
+        return const CollectionListError();
+      },
     );
   }
 }

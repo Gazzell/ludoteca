@@ -96,7 +96,6 @@ class CollectionAddItemPage extends StatelessWidget {
             canPop: true,
             onPopInvokedWithResult: (_, result) => onItemAdded(null),
             child: Scaffold(
-              backgroundColor: Colors.black54,
               appBar: showAppBar
                   ? AppBar(
                       title: Text(title ?? ''),
