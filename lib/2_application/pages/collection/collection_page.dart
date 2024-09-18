@@ -47,7 +47,7 @@ class _CollectionPageState extends State<CollectionPage> {
 
   onSelectionChanged(BuildContext context, ItemId? itemId) async {
     if (itemId != null) {
-      if (Breakpoints.small.isActive(context)) {
+      if (!Breakpoints.largeAndUp.isActive(context)) {
         await context.pushNamed('itemDetail', pathParameters: {
           'itemId': itemId.value,
         });
@@ -69,7 +69,7 @@ class _CollectionPageState extends State<CollectionPage> {
     return BlocConsumer<CollectionCubit, CollectionCubitState>(
       listener: (context, state) async {
         if (state is CollectionItemAddingState) {
-          if (Breakpoints.small.isActive(context)) {
+          if (!Breakpoints.largeAndUp.isActive(context)) {
             context.pushNamed(
               'addItem',
               extra: (item) => onItemAdded(context, item),
@@ -78,7 +78,7 @@ class _CollectionPageState extends State<CollectionPage> {
           return;
         }
         if (state is CollectionItemAddedState &&
-            Breakpoints.mediumAndUp.isActive(context)) {
+            Breakpoints.largeAndUp.isActive(context)) {
           onSelectionChanged(context, state.item?.id);
         }
       },
@@ -97,8 +97,8 @@ class _CollectionPageState extends State<CollectionPage> {
           ),
           secondaryBody: SlotLayout(
             config: {
-              Breakpoints.mediumAndUp: SlotLayout.from(
-                  key: const Key('collection-secondary-body-medium-and-up'),
+              Breakpoints.largeAndUp: SlotLayout.from(
+                  key: const Key('collection-secondary-body-large-and-up'),
                   builder: (context) {
                     return BlocBuilder<CollectionCubit, CollectionCubitState>(
                       builder: (context, state) {

@@ -15,14 +15,15 @@ class App extends StatelessWidget {
       theme: ThemeData.from(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 239, 43, 187),
+          seedColor: Colors.pink.shade300,
           brightness: Brightness.light,
         ),
       ),
       darkTheme: ThemeData.from(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 239, 43, 187),
+          seedColor: Colors.pink.shade300,
+          brightness: Brightness.dark,
         ),
       ),
       locale: TranslationProvider.of(context).flutterLocale,

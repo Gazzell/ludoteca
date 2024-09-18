@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
       ),
       secondaryBody: SlotLayout(
         config: <Breakpoint, SlotLayoutConfig>{
-          Breakpoints.mediumAndUp: SlotLayout.from(
+          Breakpoints.largeAndUp: SlotLayout.from(
             key: const Key('secondary-body-medium-and-up'),
             builder: (context) => const Placeholder(),
           )
