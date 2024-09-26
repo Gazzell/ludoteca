@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ludoteca/1_domain/entities/item_instance.dart';
 import 'package:ludoteca/1_domain/entities/unique_id.dart';
-import 'package:ludoteca/2_application/pages/collection/collection_item_detail/widgets/item_detail_data/item_detail_instance_row_list_item.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_item_detail/widgets/item_detail_data/item_detail_instances_row.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/widgets/item_detail_data/item_detail_instances.dart';
 
 void main() {
@@ -47,7 +47,7 @@ void main() {
       );
 
       expect(
-        find.byType(ItemDetailListInstanceListItem),
+        find.byType(ItemDetailInstancesRow),
         findsNWidgets(instances.length),
       );
     });
