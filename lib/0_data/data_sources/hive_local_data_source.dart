@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:ludoteca/0_data/data_sources/interfaces/collection_local_source_interface.dart';
+import 'package:ludoteca/0_data/data_sources/interfaces/fake_local_generator.dart';
 import 'package:ludoteca/0_data/exceptions/exceptions.dart';
 import 'package:ludoteca/0_data/models/item_instance_model.dart';
 import 'package:ludoteca/0_data/models/item_model.dart';
@@ -53,7 +54,11 @@ class HiveLocalDataSource implements CollectionLocalSourceInterface {
   @override
   Future<List<String>> readItemIds() async {
     final box = await _openItemsBox();
-    return await box.getAllKeys();
+    final keys = await box.getAllKeys();
+    if (keys.isEmpty) {
+      await addFakeItems();
+    }
+    return keys;
   }
 
   @override
@@ -87,8 +92,20 @@ class HiveLocalDataSource implements CollectionLocalSourceInterface {
     await itemBox.put(itemInstanceModel.itemId, item);
 
     final itemInstancesBox = await _openItemInstancesBox();
-    await itemInstancesBox.put(itemInstanceModel.id, itemInstanceModel.toJson());
+    await itemInstancesBox.put(
+        itemInstanceModel.id, itemInstanceModel.toJson());
 
     return true;
+  }
+
+  Future<void> addFakeItems() async {
+    final items = await generateItems();
+    for (final ItemModel item in items) {
+      await addItem(itemModel: item);
+      final instances = generateInstancesForItem(item.id);
+      for (final ItemInstanceModel instance in instances) {
+        await addItemInstance(itemInstanceModel: instance);
+      }
+    }
   }
 }
