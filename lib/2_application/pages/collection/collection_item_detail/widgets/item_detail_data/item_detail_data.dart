@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
 import 'package:ludoteca/1_domain/entities/item_instance.dart';
 import 'package:ludoteca/2_application/pages/collection/collection_item_detail/widgets/item_detail_data/item_detail_data_header.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_item_detail/widgets/item_detail_data/item_detail_instances.dart';
 import 'package:ludoteca/2_application/pages/collection/widgets/item_play_properties.dart';
 
 class ItemDetailData extends StatelessWidget {
@@ -20,13 +21,9 @@ class ItemDetailData extends StatelessWidget {
       showDialog(
         context: context,
         builder: (BuildContext context) => Dialog(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: itemInstances!
-                  .map((instance) => Text('Item ${instance.id}'))
-                  .toList(),
-            ),
+          child: ItemDetailInstances(
+            instances: itemInstances!,
+            itemTitle: item.title,
           ),
         ),
       );
