@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ludoteca/1_domain/entities/item_instance.dart';
-import 'package:ludoteca/2_application/pages/collection/collection_item_detail/widgets/item_detail_data/item_detail_instance_row_list_item.dart';
+import 'package:ludoteca/2_application/pages/collection/collection_item_detail/widgets/item_detail_data/item_detail_instances_row.dart';
 
 class ItemDetailInstances extends StatelessWidget {
   final List<ItemInstance> instances;
@@ -44,7 +44,8 @@ class ItemDetailInstances extends StatelessWidget {
             child: ListView.builder(
               itemCount: instances.length,
               itemBuilder: (context, index) {
-                return ItemDetailListInstanceListItem(
+                return ItemDetailInstancesRow(
+                  index: index,
                   itemInstance: instances[index],
                 );
               },

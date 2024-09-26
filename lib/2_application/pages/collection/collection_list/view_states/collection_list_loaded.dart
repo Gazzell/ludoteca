@@ -88,7 +88,7 @@ class _CollectionListLoadedState extends State<CollectionListLoaded> {
           child: Column(
             children: [
               Visibility(
-                visible: filteredItems.isNotEmpty,
+                visible: widget.items.isNotEmpty,
                 child: SearchBar(
                   leading: const Icon(Icons.search_outlined),
                   onChanged: _onSearchBarChanged,

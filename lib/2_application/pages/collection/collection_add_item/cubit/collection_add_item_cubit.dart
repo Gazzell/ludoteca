@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ludoteca/1_domain/entities/item.dart';
@@ -40,11 +42,19 @@ class CollectionAddItemCubit extends Cubit<CollectionAddItemCubitState> {
     if (addedItem.isLeft) {
       emit(const CollectionAddItemErrorState());
     } else {
+      final incidences = List.generate(
+        Random().nextInt(5),
+        (index) => index.toString(),
+      );
+      final status = ItemInstanceStatus.values[Random().nextInt(2)];
       final itemInstanceParams = AddItemInstanceParams(
         itemInstance: ItemInstance(
           id: ItemInstanceId(),
           itemId: addedItem.right.id,
-          status: ItemInstanceStatus.available,
+          status: status,
+          incidences: incidences,
+          borrowedAt:
+              status == ItemInstanceStatus.unavailable ? DateTime.now() : null,
         ),
       );
       await addItemInstance(itemInstanceParams);
